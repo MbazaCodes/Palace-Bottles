@@ -6,7 +6,7 @@ import { logoutAdmin, currentAdmin, canAccess, type AdminSession } from "@/lib/a
 import {
   LayoutDashboard, ShoppingCart, Package, LayoutGrid, Boxes, Users, Star, Ticket, Zap,
   Gift, Share2, CreditCard, Truck, Megaphone, Bell, BarChart3, FileText, UserCog,
-  History, Settings, Headset, ChevronLeft, Menu, X, LogOut,
+  History, Settings, ChevronLeft, Menu, X, LogOut,
 } from "lucide-react";
 
 const NAV = [
@@ -73,11 +73,6 @@ export default function Sidebar() {
           <button onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-lg p-1.5 hover:bg-white/10 lg:hidden"><X className="size-5" /></button>
         </div>
         {nav}
-        <div className="m-3 rounded-2xl bg-white/5 p-4">
-          <p className="flex items-center gap-2 text-sm font-bold"><Headset className="size-4" /> Need Help?</p>
-          <p className="mt-1 text-xs text-white/60">Our support team is ready to help you.</p>
-          <Link href="/contact" className="mt-3 block rounded-xl bg-royal py-2 text-center text-xs font-bold hover:bg-royal-bright">Contact Support</Link>
-        </div>
         <div className="mx-3 mb-4 grid grid-cols-2 gap-2">
           <Link href="/" className="flex items-center justify-center gap-1.5 rounded-xl bg-white/5 px-2 py-2.5 text-xs font-semibold text-white/70 hover:text-white">
             <ChevronLeft className="size-4" /> Store
