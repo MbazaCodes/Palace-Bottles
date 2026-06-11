@@ -30,7 +30,7 @@ function TrackOrderInner() {
           <input id="orderId" value={query} onChange={(e) => { setQuery(e.target.value); setNotFound(false); }}
             placeholder="e.g. PB785291"
             className="mt-1 w-full rounded-xl border border-silver px-3.5 py-3 text-sm outline-none focus:border-royal" />
-          <p className="mt-1 text-xs text-navy/50">You can find your Order ID in the confirmation message we sent you. Try PB785291 for a demo.</p>
+          <p className="mt-1 text-xs text-navy/50">You can find your Order ID in the confirmation message we sent you. Try PB785291 as an example.</p>
         </div>
         <button className="rounded-xl bg-royal px-6 py-3.5 text-sm font-bold text-white hover:bg-royal-bright">Track Order</button>
       </form>

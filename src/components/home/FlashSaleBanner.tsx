@@ -4,7 +4,7 @@ import { Zap, ArrowRight } from "lucide-react";
 import Countdown from "@/components/ui/Countdown";
 import Bottle3D from "@/components/ui/Bottle3D";
 
-// Demo target: rolls forward so the timer is always live
+// Target rolls forward so the timer is always live
 const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000 + 36 * 60000);
 
 export default function FlashSaleBanner() {

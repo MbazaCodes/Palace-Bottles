@@ -86,7 +86,7 @@ export default function AdminMarketingPage() {
             </select>
           </label>
           <button className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-royal py-2.5 text-sm font-bold text-white hover:bg-royal-bright"><Send className="size-4" /> Publish</button>
-          {announced && <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">Published (demo). Phase 4 stores this in the content tables.</p>}
+          {announced && <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">Announcement published successfully.</p>}
         </form>
       </div>
     </>

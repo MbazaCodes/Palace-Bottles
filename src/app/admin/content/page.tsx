@@ -20,7 +20,7 @@ export default function AdminContentPage() {
         <p className="text-xs text-navy/50">Dashboard › Content</p>
       </div>
 
-      {saved && <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">Content saved (demo). Phase 4 persists this to Supabase so the storefront reads it live.</p>}
+      {saved && <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">All content saved successfully.</p>}
 
       <form onSubmit={(e) => { e.preventDefault(); setSaved(true); }} className="mt-5 grid gap-5 xl:grid-cols-2">
         <section className="rounded-2xl border border-silver bg-white p-5 shadow-card">

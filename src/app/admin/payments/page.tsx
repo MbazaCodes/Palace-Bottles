@@ -90,7 +90,6 @@ export default function AdminPaymentsPage() {
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-navy/45">Demo mode: verification is local. Phase 4 updates payment_status in Supabase.</p>
     </>
   );
 }

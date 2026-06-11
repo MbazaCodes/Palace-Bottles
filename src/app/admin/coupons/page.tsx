@@ -15,14 +15,16 @@ const INITIAL: Coupon[] = [
 export default function AdminCouponsPage() {
   const [coupons, setCoupons] = useState(INITIAL);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ code: "", kind: "Percentage" as Coupon["kind"], value: "10", limit: "100" });
+  const [form, setForm] = useState({ code: "", kind: "Percentage" as Coupon["kind"], value: "10", limit: "100", start: "", end: "" });
   const input = "mt-1 w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal";
 
   const add = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.code.trim()) return;
-    setCoupons([{ code: form.code.toUpperCase(), kind: form.kind, value: Number(form.value), start: "Today", end: "—", limit: Number(form.limit), used: 0, active: true }, ...coupons]);
-    setForm({ code: "", kind: "Percentage", value: "10", limit: "100" }); setShowForm(false);
+    const startLabel = form.start ? new Date(form.start).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    const endLabel = form.end ? new Date(form.end).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "No expiry";
+    setCoupons([{ code: form.code.toUpperCase(), kind: form.kind, value: Number(form.value), start: startLabel, end: endLabel, limit: Number(form.limit), used: 0, active: true }, ...coupons]);
+    setForm({ code: "", kind: "Percentage", value: "10", limit: "100", start: "", end: "" }); setShowForm(false);
   };
 
   return (
@@ -38,7 +40,7 @@ export default function AdminCouponsPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[["Active Coupons", coupons.filter((c) => c.active).length], ["Total Redemptions", coupons.reduce((t, c) => t + c.used, 0)], ["Best Performer", "FLASH20"], ["Discount Given", "TZS 4.2M"]].map(([l, v]) => (
+        {[["Active Coupons", coupons.filter((c) => c.active).length], ["Total Redemptions", coupons.reduce((t, c) => t + c.used, 0)], ["Best Performer", coupons.reduce((best, c) => c.used > (best?.used ?? 0) ? c : best, coupons[0])?.code ?? "—"], ["Total Coupons", coupons.length]].map(([l, v]) => (
           <div key={String(l)} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{l}</p>
             <p className="font-display text-xl font-extrabold text-navy">{v}</p>
@@ -47,7 +49,7 @@ export default function AdminCouponsPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={add} className="mt-5 grid gap-4 rounded-2xl border border-silver bg-white p-5 shadow-card sm:grid-cols-2 lg:grid-cols-5">
+        <form onSubmit={add} className="mt-5 grid gap-4 rounded-2xl border border-silver bg-white p-5 shadow-card sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
           <label className="text-sm font-semibold text-navy">Coupon Code *
             <input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className={`${input} uppercase`} placeholder="e.g. JUNE15" required />
           </label>
@@ -62,8 +64,13 @@ export default function AdminCouponsPage() {
           <label className="text-sm font-semibold text-navy">Usage Limit
             <input value={form.limit} onChange={(e) => setForm({ ...form, limit: e.target.value })} inputMode="numeric" className={input} />
           </label>
+          <label className="text-sm font-semibold text-navy">Start Date
+            <input type="date" value={form.start} onChange={(e) => setForm({ ...form, start: e.target.value })} className={input} />
+          </label>
+          <label className="text-sm font-semibold text-navy">End Date
+            <input type="date" value={form.end} onChange={(e) => setForm({ ...form, end: e.target.value })} className={input} />
+          </label>
           <div className="flex items-end"><button className="w-full rounded-xl bg-navy py-2.5 text-sm font-bold text-white hover:bg-navy-deep">Save Coupon</button></div>
-          <p className="text-xs text-navy/45 lg:col-span-5">Demo mode: start/end dates and Supabase writes connect in Phase 4.</p>
         </form>
       )}
 

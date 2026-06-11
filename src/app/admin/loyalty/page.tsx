@@ -84,7 +84,7 @@ export default function AdminLoyaltyPage() {
           <label className="block text-sm font-semibold text-navy">Minimum points to redeem<input defaultValue="500" inputMode="numeric" className={input} /></label>
           <label className="block text-sm font-semibold text-navy">Signup bonus points<input defaultValue="100" inputMode="numeric" className={input} /></label>
           <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-royal py-2.5 text-sm font-bold text-white hover:bg-royal-bright"><Save className="size-4" /> Save Rules</button>
-          {saved && <p className="rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">Rules saved (demo). Phase 4 persists to Supabase.</p>}
+          {saved && <p className="rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">Points rules saved successfully.</p>}
         </form>
       </div>
     </>

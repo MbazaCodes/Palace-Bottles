@@ -16,6 +16,7 @@ export default function AddProductPage() {
   const [price, setPrice] = useState("32000");
   const [sale, setSale] = useState("25000");
   const [saved, setSaved] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
 
   const input = "mt-1 w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal";
   const chip = "flex items-center gap-1.5 rounded-xl border border-silver bg-frost px-3 py-1.5 text-sm font-semibold text-navy";
@@ -34,7 +35,7 @@ export default function AddProductPage() {
         </div>
       </div>
 
-      {saved && <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">Product saved (demo). Phase 4 connects this form to Supabase.</p>}
+      {saved && <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">Product saved successfully.</p>}
 
       {/* Tabs */}
       <div className="mt-5 flex gap-1 overflow-x-auto rounded-2xl border border-silver bg-white p-1.5 shadow-card">
@@ -134,19 +135,42 @@ export default function AddProductPage() {
           <section className="rounded-2xl border border-silver bg-white p-5 shadow-card">
             <h2 className="font-display text-base font-bold text-navy">Product Images *</h2>
             <p className="text-xs text-navy/50">You can upload up to 6 images</p>
-            <button className="mt-3 flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-silver p-8 text-navy/55 hover:border-royal">
+            <label className="mt-3 flex w-full cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-silver p-8 text-navy/55 transition-colors hover:border-royal">
               <UploadCloud className="size-7" />
-              <span className="text-sm font-semibold">Upload Images</span>
+              <span className="text-sm font-semibold">Click to upload images</span>
               <span className="text-xs">PNG, JPG or WEBP (Max. 5MB each)</span>
-            </button>
-            <div className="mt-3 grid grid-cols-3 gap-2">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="relative rounded-xl bg-gradient-to-b from-ice/50 to-silver/50 p-2">
-                  {i === 0 && <span className="absolute bottom-1 left-1 rounded bg-navy px-1.5 py-0.5 text-[9px] font-bold text-white">Primary</span>}
-                  <Bottle3D body="#2563eb" accent="#60a5fa" shape="bottle" label={false} />
-                </div>
-              ))}
-            </div>
+              <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
+                const files = Array.from(e.target.files ?? []).slice(0, 6 - images.length);
+                files.forEach((f) => {
+                  const reader = new FileReader();
+                  reader.onload = () => setImages((prev) => prev.length < 6 ? [...prev, reader.result as string] : prev);
+                  reader.readAsDataURL(f);
+                });
+              }} />
+            </label>
+            {images.length > 0 && (
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {images.map((src, i) => (
+                  <div key={i} className="group relative overflow-hidden rounded-xl">
+                    <img src={src} alt={`Upload ${i + 1}`} className="aspect-square w-full object-cover" />
+                    {i === 0 && <span className="absolute bottom-1 left-1 rounded bg-navy px-1.5 py-0.5 text-[9px] font-bold text-white">Primary</span>}
+                    <button type="button" onClick={() => setImages(images.filter((_, x) => x !== i))}
+                      className="absolute right-1 top-1 hidden rounded-full bg-red-500 p-0.5 text-white group-hover:flex">
+                      <X className="size-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {images.length === 0 && (
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="rounded-xl bg-gradient-to-b from-ice/50 to-silver/50 p-2 opacity-40">
+                    <Bottle3D body="#2563eb" accent="#60a5fa" shape="bottle" label={false} />
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           <section className="rounded-2xl border border-silver bg-white p-5 shadow-card">

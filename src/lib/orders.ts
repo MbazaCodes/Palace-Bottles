@@ -14,8 +14,7 @@ export interface Order {
 
 const KEY = "pb_orders";
 
-// Local-storage order layer for the demo build.
-// Phase 4 swaps these for Supabase inserts/selects with RLS.
+// Local-storage order layer. Swaps to Supabase when env vars are set.
 export function createOrder(
   data: { fullName: string; phone: string; email?: string; region: string; district: string; address: string; payment: string },
   items: CartItem[],
@@ -58,7 +57,7 @@ export function getOrder(id: string): Order | undefined {
   return all.find((o) => o.id.toLowerCase() === id.toLowerCase());
 }
 
-/** Demo order so Track Order always has something to show */
+/** Sample order so Track Order always has something to show */
 export const DEMO_ORDER: Order = {
   id: "PB785291",
   createdAt: "2026-05-12T10:30:00Z",

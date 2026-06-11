@@ -16,13 +16,14 @@ export default function AdminCategoriesPage() {
   const [cats, setCats] = useState(INITIAL);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
+  const [nameSw, setNameSw] = useState("");
   const input = "mt-1 w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal";
 
   const addCat = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    setCats([...cats, { slug: name.toLowerCase().replace(/\s+/g, "-"), name, nameSw: "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" }]);
-    setName(""); setShowForm(false);
+    setCats([...cats, { slug: name.toLowerCase().replace(/\s+/g, "-"), name, nameSw: nameSw || "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" }]);
+    setName(""); setNameSw(""); setShowForm(false);
   };
 
   return (
@@ -43,10 +44,9 @@ export default function AdminCategoriesPage() {
             <input value={name} onChange={(e) => setName(e.target.value)} className={input} placeholder="e.g. Lunch Boxes" required />
           </label>
           <label className="text-sm font-semibold text-navy">Swahili Name
-            <input className={input} placeholder="e.g. Vibox vya Chakula" />
+            <input value={nameSw} onChange={(e) => setNameSw(e.target.value)} className={input} placeholder="e.g. Vibox vya Chakula" />
           </label>
           <div className="flex items-end"><button className="w-full rounded-xl bg-navy py-2.5 text-sm font-bold text-white hover:bg-navy-deep">Save Category</button></div>
-          <p className="text-xs text-navy/45 sm:col-span-3">Demo mode: saved locally. Phase 4 writes to the categories table.</p>
         </form>
       )}
 

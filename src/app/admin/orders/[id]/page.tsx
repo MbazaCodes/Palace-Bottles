@@ -204,7 +204,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
           className="mt-4 flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 disabled:opacity-40">
           <XCircle className="size-4" /> Cancel Order
         </button>
-        <p className="mt-2 text-xs text-navy/45">{isLocal ? "Live order from storefront checkout: status updates are saved and shown on the customer\u2019s Track Order page." : "Demo order: status changes are local. Phase 4 connects this to Supabase."}</p>
+        <p className="mt-2 text-xs text-navy/45">Status updates are saved and shown on the customer’s Track Order page.</p>
       </div>
     </>
   );

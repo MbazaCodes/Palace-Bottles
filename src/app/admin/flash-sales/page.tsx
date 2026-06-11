@@ -7,7 +7,7 @@ import Bottle3D from "@/components/ui/Bottle3D";
 
 const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000 + 36 * 60000);
 
-const SALES = [
+const SALES_INIT = [
   { name: "Mega Flash Sale", discount: "Up to 30%", products: 8, revenue: "TZS 4,560,000", sold: 228, orders: 156, status: "Live" },
   { name: "Weekend Hydration Deal", discount: "15%", products: 5, revenue: "TZS 1,840,000", sold: 96, orders: 71, status: "Scheduled" },
   { name: "Eid Special", discount: "20%", products: 12, revenue: "TZS 6,120,000", sold: 312, orders: 240, status: "Ended" },
@@ -15,8 +15,18 @@ const SALES = [
 ];
 
 export default function AdminFlashSalesPage() {
+  const [sales, setSales] = useState(SALES_INIT);
   const [showForm, setShowForm] = useState(false);
+  const [formName, setFormName] = useState("");
+  const [formDiscount, setFormDiscount] = useState("");
   const input = "mt-1 w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal";
+
+  const addSale = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formName.trim() || !formDiscount.trim()) return;
+    setSales([{ name: formName, discount: `${formDiscount}%`, products: 0, revenue: "TZS 0", sold: 0, orders: 0, status: "Scheduled" }, ...sales]);
+    setFormName(""); setFormDiscount(""); setShowForm(false);
+  };
 
   return (
     <>
@@ -31,9 +41,9 @@ export default function AdminFlashSalesPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={(e) => { e.preventDefault(); setShowForm(false); }} className="mt-5 grid gap-4 rounded-2xl border border-silver bg-white p-5 shadow-card sm:grid-cols-2 lg:grid-cols-4">
-          <label className="text-sm font-semibold text-navy">Sale Name *<input className={input} placeholder="e.g. June Mega Sale" required /></label>
-          <label className="text-sm font-semibold text-navy">Discount (%) *<input inputMode="numeric" className={input} placeholder="e.g. 25" required /></label>
+        <form onSubmit={addSale} className="mt-5 grid gap-4 rounded-2xl border border-silver bg-white p-5 shadow-card sm:grid-cols-2 lg:grid-cols-4">
+          <label className="text-sm font-semibold text-navy">Sale Name *<input value={formName} onChange={(e) => setFormName(e.target.value)} className={input} placeholder="e.g. June Mega Sale" required /></label>
+          <label className="text-sm font-semibold text-navy">Discount (%) *<input value={formDiscount} onChange={(e) => setFormDiscount(e.target.value)} inputMode="numeric" className={input} placeholder="e.g. 25" required /></label>
           <label className="text-sm font-semibold text-navy">Starts *<input type="datetime-local" className={input} required /></label>
           <label className="text-sm font-semibold text-navy">Ends *<input type="datetime-local" className={input} required /></label>
           <label className="text-sm font-semibold text-navy lg:col-span-3">Products
@@ -42,7 +52,6 @@ export default function AdminFlashSalesPage() {
             </select>
           </label>
           <div className="flex items-end"><button className="w-full rounded-xl bg-navy py-2.5 text-sm font-bold text-white hover:bg-navy-deep">Save Sale</button></div>
-          <p className="text-xs text-navy/45 lg:col-span-4">Demo mode: writes to flash_sales + flash_sale_products in Phase 4.</p>
         </form>
       )}
 
@@ -77,7 +86,7 @@ export default function AdminFlashSalesPage() {
             </tr>
           </thead>
           <tbody>
-            {SALES.map((s) => (
+            {sales.map((s) => (
               <tr key={s.name} className="border-b border-silver/60 last:border-0 hover:bg-frost/60">
                 <td className="px-4 py-3 font-semibold text-navy">{s.name}</td>
                 <td className="font-bold text-red-500">{s.discount}</td>

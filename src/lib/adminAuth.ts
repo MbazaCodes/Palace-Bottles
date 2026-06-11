@@ -1,9 +1,8 @@
 /**
- * Admin auth + staff store (clean demo gate).
+ * Admin auth + staff store.
  * Staff created in /admin/staff are persisted in localStorage and can log in
  * at /admin/login with the email + password the admin sets. Each role only
  * sees and can open the modules it is allowed to.
- * Phase 4 swaps this for Supabase Auth + the admin_users table (roles & RLS).
  */
 
 export const DEMO_ADMIN = {

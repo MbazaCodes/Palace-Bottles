@@ -61,7 +61,6 @@ export default function AdminActivityLogsPage() {
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-navy/45">Phase 4 writes every admin action to the activity_logs table automatically.</p>
     </>
   );
 }

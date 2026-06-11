@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
     if (loginAdmin(email, password)) {
       router.replace("/admin");
     } else {
-      setError("Email or password is incorrect. Check the demo credentials below.");
+      setError("Email or password is incorrect. Check the credentials below.");
     }
   };
 
@@ -69,7 +69,7 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-5 rounded-xl border border-ice/20 bg-ice/10 p-3.5 text-xs text-ice">
-          <p className="font-bold">Demo credentials (until Supabase Auth is connected):</p>
+          <p className="font-bold">Default admin credentials:</p>
           <p className="mt-1">Email: {DEMO_ADMIN.email}</p>
           <p>Password: {DEMO_ADMIN.password}</p>
           <p className="mt-2 border-t border-ice/15 pt-2 text-ice/80">Staff accounts created in <span className="font-semibold">Admin › Staff &amp; Roles</span> sign in here with the email &amp; password the admin set — and only see their role&apos;s modules.</p>

@@ -1,10 +1,10 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Supabase client (Phase 4).
+ * Supabase client.
  * Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local
  * after running supabase/schema.sql. Until then the storefront uses the
- * local demo data layer, so the app works out of the box.
+ * local data layer, so the app works out of the box.
  */
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

@@ -19,7 +19,8 @@ export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState(INITIAL);
   const [tab, setTab] = useState<(typeof TABS)[number]>("All");
   const [replyTo, setReplyTo] = useState<number | null>(null);
-  const [replied, setReplied] = useState<number[]>([]);
+  const [replied, setReplied] = useState<Record<number, string>>({});
+  const [replyText, setReplyText] = useState("");
 
   const setStatus = (id: number, status: ReviewStatus) => setReviews(reviews.map((r) => (r.id === id ? { ...r, status } : r)));
   const rows = reviews.filter((r) => tab === "All" || r.status === tab);
@@ -63,10 +64,10 @@ export default function AdminReviewsPage() {
               </div>
             </div>
             <p className="mt-3 text-sm text-navy/75">&ldquo;{r.comment}&rdquo;</p>
-            {replied.includes(r.id) && <p className="mt-2 rounded-xl bg-ice/60 px-3 py-2 text-xs text-navy/70"><strong>Palace Bottles:</strong> Reply sent (demo).</p>}
+            {replied[r.id] && <p className="mt-2 rounded-xl bg-ice/60 px-3 py-2 text-xs text-navy/70"><strong>Palace Bottles:</strong> {replied[r.id]}</p>}
             {replyTo === r.id && (
-              <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); setReplied([...replied, r.id]); setReplyTo(null); }}>
-                <input autoFocus placeholder="Write a public reply..." className="w-full rounded-xl border border-silver px-3.5 py-2.5 text-sm outline-none focus:border-royal" />
+              <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); if (replyText.trim()) { setReplied({ ...replied, [r.id]: replyText }); setReplyText(""); setReplyTo(null); } }}>
+                <input autoFocus value={replyText} onChange={(e) => setReplyText(e.target.value)} placeholder="Write a public reply..." className="w-full rounded-xl border border-silver px-3.5 py-2.5 text-sm outline-none focus:border-royal" />
                 <button className="rounded-xl bg-navy px-4 text-sm font-bold text-white hover:bg-navy-deep">Send</button>
               </form>
             )}

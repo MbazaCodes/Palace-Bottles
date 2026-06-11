@@ -15,7 +15,6 @@ export default function AdminOrdersPage() {
   const [method, setMethod] = useState("All Methods");
   const [liveOrders, setLiveOrders] = useState<AdminOrder[]>([]);
 
-  // Orders placed through the storefront checkout (stored locally until Phase 4)
   useEffect(() => {
     setLiveOrders(
       getAllLocalOrders().map((o, i) => ({

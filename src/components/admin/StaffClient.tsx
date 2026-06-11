@@ -169,7 +169,7 @@ export default function StaffClient() {
           </tbody>
         </table>
         <p className="px-4 py-3 text-xs text-navy/55">
-          {staff.length} staff member(s). Deactivated staff cannot sign in. Demo mode: accounts live in this browser — Phase 4 moves them to the <code className="rounded bg-frost px-1">admin_users</code> table with Supabase Auth.
+          {staff.length} staff member(s). Deactivated staff cannot sign in. Staff accounts are stored in this browser.
         </p>
       </div>
     </>

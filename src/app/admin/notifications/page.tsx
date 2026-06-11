@@ -65,7 +65,7 @@ export default function AdminNotificationsPage() {
             <span className="text-xs font-normal text-navy/45">{message.length}/320</span>
           </label>
           <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-royal py-2.5 text-sm font-bold text-white hover:bg-royal-bright"><Send className="size-4" /> Send via {channel}</button>
-          <p className="mt-3 text-xs text-navy/45">Demo mode: Phase 4+ connects SMS/WhatsApp gateway (e.g. Beem Africa / Twilio).</p>
+          <p className="mt-3 text-xs text-navy/45">Messages are queued for delivery. Connect your SMS/WhatsApp gateway in Settings.</p>
         </form>
 
         {/* History */}

@@ -52,9 +52,6 @@ export default function AdminReferralsPage() {
         </table>
       </div>
 
-      <p className="mt-4 rounded-2xl border border-silver bg-white p-4 text-xs text-navy/55 shadow-card">
-        Referral links and automatic reward issuing connect to the referrals table in Phase 4.
-      </p>
     </>
   );
 }
