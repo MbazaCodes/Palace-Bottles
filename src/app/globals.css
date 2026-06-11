@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #102a6b;
+  --color-navy-deep: #0a1d4d;
+  --color-navy-night: #060f2e;
+  --color-ice: #dceeff;
+  --color-silver: #e8eaf0;
+  --color-royal: #2563eb;
+  --color-royal-bright: #3b82f6;
+  --color-frost: #f4f8fd;
+
+  --font-display: "Sora";
+  --font-sans: "Manrope";
+
+  --shadow-glass: 0 8px 32px rgba(16, 42, 107, 0.12);
+  --shadow-float: 0 24px 60px rgba(6, 15, 46, 0.45);
+  --shadow-card: 0 2px 16px rgba(16, 42, 107, 0.08);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-float-rev: float-rev 7s ease-in-out infinite;
+  --animate-shimmer: shimmer 3.5s linear infinite;
+  --animate-spin-slow: spin 28s linear infinite;
+  --animate-pulse-ring: pulse-ring 4s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(-18px) rotate(var(--tilt, 0deg)); }
+  }
+  @keyframes float-rev {
+    0%, 100% { transform: translateY(-12px) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(8px) rotate(var(--tilt, 0deg)); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.04); }
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--color-frost);
+  color: #0e1a3a;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.glass-light {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+.glass-navy {
+  background: linear-gradient(145deg, rgba(16,42,107,0.92), rgba(6,15,46,0.96));
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 238, 255, 0.12);
+}
+
+.text-balance { text-wrap: balance; }
+
+::selection { background: var(--color-ice); color: var(--color-navy); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
