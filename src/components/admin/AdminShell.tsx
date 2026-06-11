@@ -28,7 +28,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     return (
       <div className="flex min-h-dvh items-center justify-center bg-navy-night">
         <div className="flex flex-col items-center gap-3 text-white/70">
-          <span className="flex size-12 animate-pulse items-center justify-center rounded-2xl bg-gradient-to-br from-royal to-navy font-display text-xl font-extrabold text-white">B</span>
+          <img src="/logo-mark.png" alt="" className="size-12 animate-pulse rounded-2xl" />
           <p className="text-sm">Checking admin session…</p>
         </div>
       </div>

@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   description:
     "Premium thermal flasks, water bottles, sports bottles, kids bottles and coffee tumblers. Trusted across Tanzania Mainland & Zanzibar. Nationwide delivery, Mobile Money & Cash on Delivery.",
   keywords: ["thermal flask Tanzania", "water bottles Dar es Salaam", "Palace Bottles", "tumblers Tanzania"],
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -67,8 +67,7 @@ export default function Sidebar() {
       <aside className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col bg-navy-night text-white transition-transform lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex items-center justify-between gap-2 px-5 py-5">
           <Link href="/admin" className="flex items-center gap-2">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-royal to-navy font-display text-lg font-extrabold">B</span>
-            <span className="font-display text-base font-bold leading-tight">Palace<br />Bottles</span>
+            <img src="/logo-full.png" alt="Palace Bottles" className="h-9 w-auto" />
           </Link>
           <button onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-lg p-1.5 hover:bg-white/10 lg:hidden"><X className="size-5" /></button>
         </div>

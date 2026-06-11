@@ -34,12 +34,9 @@ export default function AdminLoginPage() {
       </div>
 
       <div className="glass relative w-full max-w-md rounded-3xl p-8 text-white shadow-float">
-        <div className="flex items-center gap-2.5">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-royal to-navy font-display text-xl font-extrabold">B</span>
-          <div>
-            <p className="font-display text-lg font-bold leading-tight">Palace Bottles</p>
-            <p className="text-xs text-white/60">Admin Panel</p>
-          </div>
+        <div className="flex flex-col items-center gap-3">
+          <img src="/logo-full.png" alt="Palace Bottles" className="h-10 w-auto" />
+          <p className="text-xs text-white/60">Admin Panel</p>
         </div>
 
         <h1 className="mt-7 font-display text-2xl font-extrabold">Welcome back</h1>
