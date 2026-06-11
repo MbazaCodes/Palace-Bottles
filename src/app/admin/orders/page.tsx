@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Download, Plus, Search, Eye, Pencil, MoreVertical, Filter } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 import { ADMIN_ORDERS, ORDER_STATUS_SUMMARY, type AdminOrder, type AdminOrderStatus } from "@/data/admin";
-import { getAllLocalOrders } from "@/lib/orders";
+import { getAllOrders } from "@/lib/orders";
 
 const STATUSES = ["All Status", "Pending", "Confirmed", "Processing", "Packed", "Shipped", "Delivered", "Cancelled"];
 const METHODS = ["All Methods", "M-Pesa", "Airtel Money", "Mixx by Yas", "HaloPesa", "Cash on Delivery"];
@@ -17,7 +17,7 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     setLiveOrders(
-      getAllLocalOrders().map((o, i) => ({
+      getAllOrders().map((o, i) => ({
         id: o.id,
         seq: `#L${String(i + 1).padStart(3, "0")}`,
         customer: o.customer.fullName,

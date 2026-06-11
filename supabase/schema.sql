@@ -297,3 +297,18 @@ insert into categories (slug, name, name_sw, sort_order) values
   ('sports-bottles', 'Sports Bottles', 'Chupa za Michezo', 3),
   ('kids-bottles', 'Kids Bottles', 'Chupa za Watoto', 4),
   ('coffee-tumblers', 'Coffee Tumblers', 'Vikombe vya Kahawa', 5);
+
+-- =============================================================
+-- SEED: Super Admin user
+-- The admin user must first exist in auth.users (created via
+-- Supabase dashboard or Auth API signup). This INSERT links
+-- that auth user to the admin_users table with Super Admin role.
+-- =============================================================
+INSERT INTO admin_users (id, full_name, role, is_active)
+VALUES (
+  '579a2172-0dd4-44d3-ac3a-476b8375d5e4',
+  'Palace Admin',
+  'super_admin',
+  true
+)
+ON CONFLICT (id) DO NOTHING;

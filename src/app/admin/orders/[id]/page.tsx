@@ -6,7 +6,7 @@ import { Printer, MoreVertical, Copy, Check, CheckCircle2, Settings, Package, Tr
 import StatusBadge from "@/components/admin/StatusBadge";
 import Bottle3D from "@/components/ui/Bottle3D";
 import { ADMIN_ORDERS, type AdminOrder, type AdminOrderStatus } from "@/data/admin";
-import { getOrder, updateLocalOrderStatus } from "@/lib/orders";
+import { getOrder, updateOrderStatus } from "@/lib/orders";
 
 const FLOW: AdminOrderStatus[] = ["Pending", "Confirmed", "Processing", "Packed", "Shipped", "Delivered"];
 const ACTIONS: { status: AdminOrderStatus; label: string; icon: typeof Check }[] = [
@@ -49,7 +49,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
 
   const setStatus = (s: AdminOrderStatus) => {
     setStatusState(s);
-    if (isLocal) updateLocalOrderStatus(id, s as never); // persists → customer Track Order page reflects it
+    if (isLocal) updateOrderStatus(id, s as never); // persists → customer Track Order page reflects it
   };
 
   if (!checkedLocal && !demoOrder) {

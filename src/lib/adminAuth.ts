@@ -5,9 +5,10 @@
  * sees and can open the modules it is allowed to.
  */
 
-export const DEMO_ADMIN = {
-  email: "admin@palacebottles.com",
+export const SUPER_ADMIN = {
+  email: "admin@palacebottle.com",
   password: "palace2026",
+  uid: "579a2172-0dd4-44d3-ac3a-476b8375d5e4",
 };
 
 export type StaffRole =
@@ -65,10 +66,7 @@ export function canAccess(role: StaffRole, path: string): boolean {
 
 function seedStaff(): Staff[] {
   return [
-    { id: "ST-001", name: "Palace Admin", email: DEMO_ADMIN.email, phone: "+255 657 397 719", role: "Super Admin", password: DEMO_ADMIN.password, active: true, createdAt: "Jan 10, 2026" },
-    { id: "ST-002", name: "Neema Joseph", email: "neema@palacebottles.com", phone: "+255 712 000 111", role: "Order Manager", password: "orders2026", active: true, createdAt: "Feb 14, 2026" },
-    { id: "ST-003", name: "Baraka Mussa", email: "baraka@palacebottles.com", phone: "+255 713 222 333", role: "Shipping Manager", password: "ship2026", active: true, createdAt: "Mar 2, 2026" },
-    { id: "ST-004", name: "Zainab Omar", email: "zainab@palacebottles.com", phone: "+255 714 444 555", role: "Customer Support", password: "support2026", active: true, createdAt: "Mar 20, 2026" },
+    { id: "ST-001", name: "Palace Admin", email: SUPER_ADMIN.email, phone: "+255 657 397 719", role: "Super Admin", password: SUPER_ADMIN.password, active: true, createdAt: "Jan 10, 2026" },
   ];
 }
 
@@ -91,7 +89,7 @@ export function currentAdmin(): AdminSession | null {
   if (typeof window === "undefined") return null;
   const raw = localStorage.getItem(SESSION_KEY);
   if (!raw) return null;
-  if (raw === "1") return { name: "Palace Admin", email: DEMO_ADMIN.email, role: "Super Admin" }; // legacy session
+  if (raw === "1") return { name: "Palace Admin", email: SUPER_ADMIN.email, role: "Super Admin" };
   try { return JSON.parse(raw) as AdminSession; } catch { return null; }
 }
 
@@ -101,18 +99,21 @@ export function isAdminLoggedIn(): boolean {
 
 export function loginAdmin(email: string, password: string): boolean {
   const e = email.trim().toLowerCase();
-  const staff = getStaff().find((s) => s.email.toLowerCase() === e && s.password === password && s.active);
-  if (staff) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ name: staff.name, email: staff.email, role: staff.role } satisfies AdminSession));
+  // Check superadmin first
+  if (e === SUPER_ADMIN.email && password === SUPER_ADMIN.password) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ name: "Palace Admin", email: SUPER_ADMIN.email, role: "Super Admin" } satisfies AdminSession));
     return true;
   }
-  if (e === DEMO_ADMIN.email && password === DEMO_ADMIN.password) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ name: "Palace Admin", email: DEMO_ADMIN.email, role: "Super Admin" } satisfies AdminSession));
+  // Check staff accounts
+  const staff = getStaff();
+  const member = staff.find((s) => s.email.toLowerCase() === e && s.password === password && s.active);
+  if (member) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ name: member.name, email: member.email, role: member.role } satisfies AdminSession));
     return true;
   }
   return false;
 }
 
 export function logoutAdmin() {
-  if (typeof window !== "undefined") localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_KEY);
 }

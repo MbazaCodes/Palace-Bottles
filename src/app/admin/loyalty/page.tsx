@@ -12,7 +12,7 @@ const POINTS = [
 ];
 
 const HISTORY = [
-  { customer: "Juma Mwinyi", change: "+102", reason: "Order PB785291", type: "Earned", date: "May 18, 2026" },
+  { customer: "Juma Mwinyi", change: "+102", reason: "Order PB100001", type: "Earned", date: "May 18, 2026" },
   { customer: "Neema Paul", change: "-1,000", reason: "Redeemed: TZS 10,000 voucher", type: "Redeemed", date: "May 17, 2026" },
   { customer: "Asha Mohamed", change: "+75", reason: "Order PB785290", type: "Earned", date: "May 17, 2026" },
   { customer: "David Patrick", change: "-500", reason: "Redeemed: Free delivery", type: "Redeemed", date: "May 15, 2026" },

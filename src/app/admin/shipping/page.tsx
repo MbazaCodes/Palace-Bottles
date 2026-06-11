@@ -6,7 +6,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 
 type ShipStatus = "Pending" | "Shipped" | "Delivered";
 const INITIAL = [
-  { order: "PB785291", customer: "Juma Mwinyi", destination: "Dar es Salaam, Kinondoni", status: "Pending" as ShipStatus, note: "", updated: "May 18, 2026" },
+  { order: "PB100001", customer: "Juma Mwinyi", destination: "Dar es Salaam, Kinondoni", status: "Pending" as ShipStatus, note: "", updated: "May 18, 2026" },
   { order: "PB785290", customer: "Asha Mohamed", destination: "Dodoma, Dodoma Urban", status: "Pending" as ShipStatus, note: "Fragile — gift wrap", updated: "May 18, 2026" },
   { order: "PB785289", customer: "Michael John", destination: "Arusha, Arusha City", status: "Pending" as ShipStatus, note: "", updated: "May 18, 2026" },
   { order: "PB785288", customer: "Neema Paul", destination: "Mwanza, Nyamagana", status: "Shipped" as ShipStatus, note: "Via Sumry bus — receipt 88421", updated: "May 18, 2026" },

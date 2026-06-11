@@ -3,7 +3,7 @@ import { Suspense, useState } from "react";
 import { PackageSearch, Check, Clock, Phone, MapPin } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import Bottle3D from "@/components/ui/Bottle3D";
-import { getOrder, DEMO_ORDER, type Order } from "@/lib/orders";
+import { getOrder, type Order } from "@/lib/orders";
 import { formatTZS, ORDER_STATUSES, BRAND } from "@/lib/constants";
 
 function TrackOrderInner() {
@@ -13,7 +13,7 @@ function TrackOrderInner() {
 
   const track = (e: React.FormEvent) => {
     e.preventDefault();
-    const found = query.trim().toUpperCase() === DEMO_ORDER.id ? DEMO_ORDER : getOrder(query.trim());
+    const found = getOrder(query.trim());
     setOrder(found ?? null);
     setNotFound(!found);
   };
@@ -28,9 +28,9 @@ function TrackOrderInner() {
         <div className="flex-1">
           <label htmlFor="orderId" className="text-sm font-bold text-navy">Enter your Order ID</label>
           <input id="orderId" value={query} onChange={(e) => { setQuery(e.target.value); setNotFound(false); }}
-            placeholder="e.g. PB785291"
+            placeholder="e.g. PB123456"
             className="mt-1 w-full rounded-xl border border-silver px-3.5 py-3 text-sm outline-none focus:border-royal" />
-          <p className="mt-1 text-xs text-navy/50">You can find your Order ID in the confirmation message we sent you. Try PB785291 as an example.</p>
+          <p className="mt-1 text-xs text-navy/50">You can find your Order ID in the confirmation message we sent you.</p>
         </div>
         <button className="rounded-xl bg-royal px-6 py-3.5 text-sm font-bold text-white hover:bg-royal-bright">Track Order</button>
       </form>

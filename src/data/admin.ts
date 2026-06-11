@@ -50,7 +50,7 @@ export interface AdminOrder {
 
 export const ADMIN_ORDERS: AdminOrder[] = [
   {
-    id: "PB785291", seq: "#1021", customer: "Juma Mwinyi", phone: "+255 712 345 678", email: "juma.mwinyi@gmail.com",
+    id: "PB100001", seq: "#1021", customer: "Juma Mwinyi", phone: "+255 712 345 678", email: "juma.mwinyi@gmail.com",
     amount: 102000, payment: "M-Pesa", paid: true, status: "Pending", date: "May 18, 2026 10:30 AM",
     region: "Dar es Salaam", district: "Kinondoni", address: "Makumbusho, Near Mesuma Hotel",
     items: [

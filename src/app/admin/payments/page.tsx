@@ -5,7 +5,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 
 type PayStatus = "Pending" | "Verified" | "Failed";
 const INITIAL = [
-  { ref: "MP240518A91", order: "PB785291", customer: "Juma Mwinyi", method: "M-Pesa", amount: 102000, status: "Verified" as PayStatus, date: "May 18, 2026 10:32 AM" },
+  { ref: "MP240518A91", order: "PB100001", customer: "Juma Mwinyi", method: "M-Pesa", amount: 102000, status: "Verified" as PayStatus, date: "May 18, 2026 10:32 AM" },
   { ref: "AM240518B22", order: "PB785290", customer: "Asha Mohamed", method: "Airtel Money", amount: 75000, status: "Verified" as PayStatus, date: "May 18, 2026 09:47 AM" },
   { ref: "MX240518C40", order: "PB785289", customer: "Michael John", method: "Mixx by Yas", amount: 50000, status: "Pending" as PayStatus, date: "May 18, 2026 09:21 AM" },
   { ref: "MP240518D15", order: "PB785288", customer: "Neema Paul", method: "M-Pesa", amount: 125000, status: "Verified" as PayStatus, date: "May 18, 2026 08:56 AM" },

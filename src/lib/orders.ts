@@ -4,7 +4,7 @@ import type { OrderStatus } from "./constants";
 export interface Order {
   id: string;
   createdAt: string;
-  status: OrderStatus | "Cancelled";
+  status: OrderStatus;
   customer: { fullName: string; phone: string; email?: string };
   delivery: { region: string; district: string; address: string };
   payment: string;
@@ -14,7 +14,7 @@ export interface Order {
 
 const KEY = "pb_orders";
 
-// Local-storage order layer. Swaps to Supabase when env vars are set.
+/** Create an order from checkout and persist to localStorage. */
 export function createOrder(
   data: { fullName: string; phone: string; email?: string; region: string; district: string; address: string; payment: string },
   items: CartItem[],
@@ -40,35 +40,23 @@ export function createOrder(
   return order;
 }
 
-export function getAllLocalOrders(): Order[] {
-  if (typeof window === "undefined") return [];
-  return JSON.parse(localStorage.getItem(KEY) ?? "[]") as Order[];
-}
-
-export function updateLocalOrderStatus(id: string, status: Order["status"]) {
-  if (typeof window === "undefined") return;
-  const all = getAllLocalOrders().map((o) => (o.id.toLowerCase() === id.toLowerCase() ? { ...o, status } : o));
-  localStorage.setItem(KEY, JSON.stringify(all));
-}
-
+/** Retrieve an order by ID from localStorage. */
 export function getOrder(id: string): Order | undefined {
   if (typeof window === "undefined") return undefined;
   const all = JSON.parse(localStorage.getItem(KEY) ?? "[]") as Order[];
   return all.find((o) => o.id.toLowerCase() === id.toLowerCase());
 }
 
-/** Sample order so Track Order always has something to show */
-export const DEMO_ORDER: Order = {
-  id: "PB785291",
-  createdAt: "2026-05-12T10:30:00Z",
-  status: "Processing",
-  customer: { fullName: "Juma Mwinyi", phone: "+255 712 345 678" },
-  delivery: { region: "Dar es Salaam", district: "Kinondoni", address: "Makumbusho, Near Mesuma Hotel" },
-  payment: "M-Pesa",
-  items: [
-    { name: "Palace Classic Flask", capacity: "1L", color: "Black", qty: 1, price: 45000, visual: { body: "#16181d", accent: "#3a3f4a", shape: "flask" } },
-    { name: "Hydro Active Bottle", capacity: "750ml", color: "Blue", qty: 1, price: 32000, visual: { body: "#2563eb", accent: "#60a5fa", shape: "bottle" } },
-    { name: "Kids Fun Bottle", capacity: "500ml", color: "Purple", qty: 1, price: 25000, visual: { body: "#a78bfa", accent: "#c4b5fd", shape: "kids" } },
-  ],
-  subtotal: 102000,
-};
+/** Get all orders from localStorage. */
+export function getAllOrders(): Order[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem(KEY) ?? "[]") as Order[]; } catch { return []; }
+}
+
+/** Update an order's status in localStorage. */
+export function updateOrderStatus(id: string, status: OrderStatus): void {
+  if (typeof window === "undefined") return;
+  const all = getAllOrders();
+  const updated = all.map((o) => (o.id.toLowerCase() === id.toLowerCase() ? { ...o, status } : o));
+  localStorage.setItem(KEY, JSON.stringify(updated));
+}

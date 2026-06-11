@@ -21,4 +21,4 @@ export const TZ_REGIONS = [
 export const formatTZS = (n: number) => `TZS ${n.toLocaleString("en-US")}`;
 
 export const ORDER_STATUSES = ["Pending", "Confirmed", "Processing", "Packed", "Shipped", "Delivered"] as const;
-export type OrderStatus = (typeof ORDER_STATUSES)[number];
+export type OrderStatus = (typeof ORDER_STATUSES)[number] | "Cancelled";

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Lock, Mail, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { loginAdmin, DEMO_ADMIN } from "@/lib/adminAuth";
+import { loginAdmin, SUPER_ADMIN } from "@/lib/adminAuth";
 import Bottle3D from "@/components/ui/Bottle3D";
 
 export default function AdminLoginPage() {
@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
             <span className="mt-1.5 flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3.5 py-3 focus-within:border-ice">
               <Mail className="size-4 text-white/45" />
               <input type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setError(""); }}
-                placeholder="admin@palacebottles.com" autoComplete="username"
+                placeholder="admin@palacebottle.com" autoComplete="username"
                 className="w-full bg-transparent text-sm outline-none placeholder:text-white/35" />
             </span>
           </label>
@@ -69,9 +69,9 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-5 rounded-xl border border-ice/20 bg-ice/10 p-3.5 text-xs text-ice">
-          <p className="font-bold">Default admin credentials:</p>
-          <p className="mt-1">Email: {DEMO_ADMIN.email}</p>
-          <p>Password: {DEMO_ADMIN.password}</p>
+          <p className="font-bold">Super Admin credentials:</p>
+          <p className="mt-1">Email: {SUPER_ADMIN.email}</p>
+          <p>Password: {SUPER_ADMIN.password}</p>
           <p className="mt-2 border-t border-ice/15 pt-2 text-ice/80">Staff accounts created in <span className="font-semibold">Admin › Staff &amp; Roles</span> sign in here with the email &amp; password the admin set — and only see their role&apos;s modules.</p>
         </div>
 
