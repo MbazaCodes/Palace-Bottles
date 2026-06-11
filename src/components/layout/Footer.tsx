@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowRight, Lock } from "lucide-react";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 import { BRAND } from "@/lib/constants";
 import Logo from "./Logo";
@@ -71,11 +71,15 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-white/50 sm:flex-row">
-          <p>© {new Date().getFullYear()} Palace Bottles. All rights reserved. · <Link href="/admin/login" className="font-semibold text-white/65 hover:text-ice">Admin Login</Link></p>
-          <p className="flex items-center gap-3 font-medium text-white/65">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-5 text-xs text-white/50 lg:flex-row">
+          <p>© {new Date().getFullYear()} Palace Bottles. All rights reserved.</p>
+          <p className="flex flex-wrap items-center justify-center gap-3 font-medium text-white/65">
             <span>m-pesa</span><span>airtel money</span><span>mixx by yas</span><span>HaloPesa</span><span>Cash on Delivery</span>
           </p>
+          <Link href="/admin/login"
+            className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-xs font-bold text-white/80 transition-colors hover:border-royal hover:bg-royal hover:text-white">
+            <Lock className="size-3.5" /> Admin Login
+          </Link>
         </div>
       </div>
     </footer>
