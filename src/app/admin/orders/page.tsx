@@ -1,9 +1,10 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Download, Plus, Search, Eye, Pencil, MoreVertical, Filter } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
-import { ADMIN_ORDERS, ORDER_STATUS_SUMMARY } from "@/data/admin";
+import { ADMIN_ORDERS, ORDER_STATUS_SUMMARY, type AdminOrder, type AdminOrderStatus } from "@/data/admin";
+import { getAllLocalOrders } from "@/lib/orders";
 
 const STATUSES = ["All Status", "Pending", "Confirmed", "Processing", "Packed", "Shipped", "Delivered", "Cancelled"];
 const METHODS = ["All Methods", "M-Pesa", "Airtel Money", "Mixx by Yas", "HaloPesa", "Cash on Delivery"];
@@ -12,16 +13,42 @@ export default function AdminOrdersPage() {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("All Status");
   const [method, setMethod] = useState("All Methods");
+  const [liveOrders, setLiveOrders] = useState<AdminOrder[]>([]);
+
+  // Orders placed through the storefront checkout (stored locally until Phase 4)
+  useEffect(() => {
+    setLiveOrders(
+      getAllLocalOrders().map((o, i) => ({
+        id: o.id,
+        seq: `#L${String(i + 1).padStart(3, "0")}`,
+        customer: o.customer.fullName,
+        phone: o.customer.phone,
+        email: o.customer.email,
+        amount: o.subtotal,
+        payment: o.payment,
+        paid: false,
+        status: o.status as AdminOrderStatus,
+        date: new Date(o.createdAt).toLocaleString(),
+        region: o.delivery.region,
+        district: o.delivery.district,
+        address: o.delivery.address,
+        items: o.items.map((it) => ({
+          name: it.name, variant: `${it.capacity} / ${it.color}`, price: it.price, qty: it.qty,
+          body: it.visual.body, accent: it.visual.accent, shape: it.visual.shape,
+        })),
+      }))
+    );
+  }, []);
 
   const rows = useMemo(
     () =>
-      ADMIN_ORDERS.filter(
+      [...liveOrders, ...ADMIN_ORDERS].filter(
         (o) =>
           (status === "All Status" || o.status === status) &&
           (method === "All Methods" || o.payment === method) &&
           (q === "" || o.id.toLowerCase().includes(q.toLowerCase()) || o.customer.toLowerCase().includes(q.toLowerCase()) || o.phone.includes(q))
       ),
-    [q, status, method]
+    [q, status, method, liveOrders]
   );
 
   const initials = (n: string) => n.split(" ").map((w) => w[0]).join("").slice(0, 2);
@@ -89,7 +116,7 @@ export default function AdminOrdersPage() {
               <tr key={o.id} className="border-b border-silver/60 last:border-0 hover:bg-frost/60">
                 <td className="px-4 py-3.5">
                   <Link href={`/admin/orders/${o.id}`} className="font-bold text-navy hover:text-royal">{o.id}</Link>
-                  <p className="text-xs text-navy/45">{o.seq}</p>
+                  <p className="text-xs text-navy/45">{o.seq}{o.seq.startsWith("#L") && <span className="ml-1.5 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700">LIVE</span>}</p>
                 </td>
                 <td>
                   <span className="flex items-center gap-2.5">

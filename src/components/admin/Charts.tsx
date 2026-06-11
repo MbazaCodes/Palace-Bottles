@@ -1,7 +1,7 @@
 "use client";
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell, Legend, BarChart, Bar,
 } from "recharts";
 import { REVENUE_SERIES, CATEGORY_SPLIT } from "@/data/admin";
 
@@ -37,6 +37,50 @@ export function CategoryDonut() {
         <Tooltip formatter={(v, n) => [`${Number(v).toLocaleString()} units`, n]} contentStyle={{ borderRadius: 12, border: "1px solid #e8eaf0", fontSize: 12 }} />
         <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
       </PieChart>
+    </ResponsiveContainer>
+  );
+}
+
+const MONTHLY = [
+  { m: "Dec", revenue: 28500000 }, { m: "Jan", revenue: 32100000 }, { m: "Feb", revenue: 29800000 },
+  { m: "Mar", revenue: 38400000 }, { m: "Apr", revenue: 41200000 }, { m: "May", revenue: 46800000 },
+];
+
+const GROWTH = [
+  { m: "Dec", customers: 5210 }, { m: "Jan", customers: 5840 }, { m: "Feb", customers: 6390 },
+  { m: "Mar", customers: 7120 }, { m: "Apr", customers: 7830 }, { m: "May", customers: 8450 },
+];
+
+export function MonthlyRevenueBar() {
+  return (
+    <ResponsiveContainer width="100%" height={250}>
+      <BarChart data={MONTHLY} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e8eaf0" vertical={false} />
+        <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#5b6688" }} axisLine={false} tickLine={false} />
+        <YAxis tickFormatter={fmtM} tick={{ fontSize: 11, fill: "#5b6688" }} axisLine={false} tickLine={false} width={70} />
+        <Tooltip formatter={(v) => [fmtM(Number(v)), "Revenue"]} contentStyle={{ borderRadius: 12, border: "1px solid #e8eaf0", fontSize: 12 }} />
+        <Bar dataKey="revenue" fill="#2563eb" radius={[8, 8, 0, 0]} maxBarSize={42} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+export function CustomerGrowthLine() {
+  return (
+    <ResponsiveContainer width="100%" height={250}>
+      <AreaChart data={GROWTH} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
+        <defs>
+          <linearGradient id="cust" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e8eaf0" vertical={false} />
+        <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#5b6688" }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fontSize: 11, fill: "#5b6688" }} axisLine={false} tickLine={false} width={50} />
+        <Tooltip formatter={(v) => [Number(v).toLocaleString(), "Customers"]} contentStyle={{ borderRadius: 12, border: "1px solid #e8eaf0", fontSize: 12 }} />
+        <Area type="monotone" dataKey="customers" stroke="#10b981" strokeWidth={2.5} fill="url(#cust)" dot={{ r: 3, fill: "#10b981" }} />
+      </AreaChart>
     </ResponsiveContainer>
   );
 }

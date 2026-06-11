@@ -4,7 +4,7 @@ import type { OrderStatus } from "./constants";
 export interface Order {
   id: string;
   createdAt: string;
-  status: OrderStatus;
+  status: OrderStatus | "Cancelled";
   customer: { fullName: string; phone: string; email?: string };
   delivery: { region: string; district: string; address: string };
   payment: string;
@@ -39,6 +39,17 @@ export function createOrder(
     localStorage.setItem(KEY, JSON.stringify([order, ...all]));
   }
   return order;
+}
+
+export function getAllLocalOrders(): Order[] {
+  if (typeof window === "undefined") return [];
+  return JSON.parse(localStorage.getItem(KEY) ?? "[]") as Order[];
+}
+
+export function updateLocalOrderStatus(id: string, status: Order["status"]) {
+  if (typeof window === "undefined") return;
+  const all = getAllLocalOrders().map((o) => (o.id.toLowerCase() === id.toLowerCase() ? { ...o, status } : o));
+  localStorage.setItem(KEY, JSON.stringify(all));
 }
 
 export function getOrder(id: string): Order | undefined {

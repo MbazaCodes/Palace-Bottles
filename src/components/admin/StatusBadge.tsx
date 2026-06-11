@@ -13,11 +13,25 @@ const STYLES: Record<string, string> = {
   "In Stock": "bg-emerald-100 text-emerald-700",
   "Low Stock": "bg-amber-100 text-amber-700",
   "Out of Stock": "bg-red-100 text-red-600",
+  Verified: "bg-emerald-100 text-emerald-700",
+  Failed: "bg-red-100 text-red-600",
+  Approved: "bg-emerald-100 text-emerald-700",
+  Rejected: "bg-red-100 text-red-600",
+  Scheduled: "bg-blue-100 text-blue-700",
+  Live: "bg-emerald-100 text-emerald-700",
+  Ended: "bg-slate-100 text-slate-500",
+  Expired: "bg-slate-100 text-slate-500",
+  Draft: "bg-slate-100 text-slate-500",
+  Published: "bg-emerald-100 text-emerald-700",
+  Sent: "bg-emerald-100 text-emerald-700",
+  Redeemed: "bg-violet-100 text-violet-700",
+  Earned: "bg-emerald-100 text-emerald-700",
+  Rewarded: "bg-emerald-100 text-emerald-700",
 };
 
 export default function StatusBadge({ status }: { status: string }) {
   return (
-    <span className={`inline-block rounded-md px-2 py-1 text-[11px] font-bold ${STYLES[status] ?? "bg-slate-100 text-slate-600"}`}>
+    <span className={`inline-block whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-bold ${STYLES[status] ?? "bg-slate-100 text-slate-600"}`}>
       {status}
     </span>
   );

@@ -1,11 +1,12 @@
 "use client";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Printer, MoreVertical, Copy, Check, CheckCircle2, Settings, Package, Truck, CircleCheck, XCircle, Pencil } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 import Bottle3D from "@/components/ui/Bottle3D";
-import { ADMIN_ORDERS, type AdminOrderStatus } from "@/data/admin";
+import { ADMIN_ORDERS, type AdminOrder, type AdminOrderStatus } from "@/data/admin";
+import { getOrder, updateLocalOrderStatus } from "@/lib/orders";
 
 const FLOW: AdminOrderStatus[] = ["Pending", "Confirmed", "Processing", "Packed", "Shipped", "Delivered"];
 const ACTIONS: { status: AdminOrderStatus; label: string; icon: typeof Check }[] = [
@@ -16,10 +17,44 @@ const ACTIONS: { status: AdminOrderStatus; label: string; icon: typeof Check }[]
   { status: "Delivered", label: "Mark Delivered", icon: CircleCheck },
 ];
 
+function localToAdmin(id: string): AdminOrder | undefined {
+  const o = getOrder(id);
+  if (!o) return undefined;
+  return {
+    id: o.id, seq: "#LIVE", customer: o.customer.fullName, phone: o.customer.phone, email: o.customer.email,
+    amount: o.subtotal, payment: o.payment, paid: false, status: o.status as AdminOrderStatus,
+    date: new Date(o.createdAt).toLocaleString(), region: o.delivery.region, district: o.delivery.district,
+    address: o.delivery.address,
+    items: o.items.map((it) => ({ name: it.name, variant: `${it.capacity} / ${it.color}`, price: it.price, qty: it.qty, body: it.visual.body, accent: it.visual.accent, shape: it.visual.shape })),
+  };
+}
+
 export default function AdminOrderDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const order = ADMIN_ORDERS.find((o) => o.id === id);
-  const [status, setStatus] = useState<AdminOrderStatus>(order?.status ?? "Pending");
+  const [localOrder, setLocalOrder] = useState<AdminOrder | undefined>(undefined);
+  const [checkedLocal, setCheckedLocal] = useState(false);
+  const demoOrder = ADMIN_ORDERS.find((o) => o.id === id);
+  const order = demoOrder ?? localOrder;
+  const isLocal = !demoOrder && Boolean(localOrder);
+  const [status, setStatusState] = useState<AdminOrderStatus>(demoOrder?.status ?? "Pending");
+
+  useEffect(() => {
+    if (!demoOrder) {
+      const lo = localToAdmin(id);
+      setLocalOrder(lo);
+      if (lo) setStatusState(lo.status);
+    }
+    setCheckedLocal(true);
+  }, [id, demoOrder]);
+
+  const setStatus = (s: AdminOrderStatus) => {
+    setStatusState(s);
+    if (isLocal) updateLocalOrderStatus(id, s as never); // persists → customer Track Order page reflects it
+  };
+
+  if (!checkedLocal && !demoOrder) {
+    return <p className="py-20 text-center text-sm text-navy/55">Loading order…</p>;
+  }
   if (!order) notFound();
 
   const idx = FLOW.indexOf(status);
@@ -169,7 +204,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
           className="mt-4 flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 disabled:opacity-40">
           <XCircle className="size-4" /> Cancel Order
         </button>
-        <p className="mt-2 text-xs text-navy/45">Demo mode: status changes are local. Phase 4 connects this to Supabase.</p>
+        <p className="mt-2 text-xs text-navy/45">{isLocal ? "Live order from storefront checkout: status updates are saved and shown on the customer\u2019s Track Order page." : "Demo order: status changes are local. Phase 4 connects this to Supabase."}</p>
       </div>
     </>
   );

@@ -1,6 +1,10 @@
-import { Search, Bell, MessageSquare, ChevronDown } from "lucide-react";
+"use client";
+import { useRouter } from "next/navigation";
+import { Search, Bell, MessageSquare, ChevronDown, LogOut } from "lucide-react";
+import { logoutAdmin } from "@/lib/adminAuth";
 
 export default function AdminTopbar() {
+  const router = useRouter();
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-silver bg-white/90 px-4 py-3 backdrop-blur-md lg:px-8">
       <label className="ml-12 flex w-full max-w-md items-center gap-2 rounded-xl border border-silver bg-frost px-3.5 py-2.5 lg:ml-0">
@@ -25,6 +29,10 @@ export default function AdminTopbar() {
             <span className="block text-xs text-navy/55">Super Admin</span>
           </span>
           <ChevronDown className="hidden size-4 text-navy/50 md:block" />
+        </button>
+        <button onClick={() => { logoutAdmin(); router.replace("/admin/login"); }} aria-label="Log out"
+          className="flex items-center gap-1.5 rounded-xl border border-silver px-3 py-2 text-xs font-bold text-navy hover:bg-frost">
+          <LogOut className="size-3.5" /> Logout
         </button>
       </div>
     </header>

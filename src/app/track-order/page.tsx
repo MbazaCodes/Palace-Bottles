@@ -18,7 +18,7 @@ function TrackOrderInner() {
     setNotFound(!found);
   };
 
-  const statusIdx = order ? ORDER_STATUSES.indexOf(order.status) : -1;
+  const statusIdx = order && order.status !== "Cancelled" ? ORDER_STATUSES.indexOf(order.status as (typeof ORDER_STATUSES)[number]) : -1;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -49,7 +49,7 @@ function TrackOrderInner() {
             <div><p className="text-xs text-navy/55">Order Date</p><p className="text-sm font-semibold text-navy">{new Date(order.createdAt).toLocaleString()}</p></div>
             <div><p className="text-xs text-navy/55">Payment Method</p><p className="text-sm font-semibold text-navy">{order.payment}</p></div>
             <div><p className="text-xs text-navy/55">Status</p>
-              <span className="inline-block rounded-md bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-700">{order.status}</span>
+              <span className={`inline-block rounded-md px-2 py-1 text-xs font-bold ${order.status === "Cancelled" ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700"}`}>{order.status}</span>
             </div>
           </div>
 
