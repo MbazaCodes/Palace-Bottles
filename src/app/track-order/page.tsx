@@ -47,7 +47,11 @@ function TrackOrderInner() {
           <div className="grid gap-4 rounded-2xl border border-silver bg-white p-6 shadow-card sm:grid-cols-4">
             <div><p className="text-xs text-navy/55">Order ID</p><p className="font-display text-lg font-bold text-navy">{order.id}</p></div>
             <div><p className="text-xs text-navy/55">Order Date</p><p className="text-sm font-semibold text-navy">{new Date(order.createdAt).toLocaleString()}</p></div>
-            <div><p className="text-xs text-navy/55">Payment Method</p><p className="text-sm font-semibold text-navy">{order.payment}</p></div>
+            <div><p className="text-xs text-navy/55">Payment Method</p><p className="text-sm font-semibold text-navy">{order.payment}</p>
+              <span className={`mt-0.5 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold ${order.payment === "Cash on Delivery" ? "bg-blue-100 text-blue-700" : "bg-amber-100 text-amber-700"}`}>
+                {order.payment === "Cash on Delivery" ? "Pay on Delivery" : "Pending verification"}
+              </span>
+            </div>
             <div><p className="text-xs text-navy/55">Status</p>
               <span className={`inline-block rounded-md px-2 py-1 text-xs font-bold ${order.status === "Cancelled" ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700"}`}>{order.status}</span>
             </div>
