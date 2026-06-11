@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { logoutAdmin } from "@/lib/adminAuth";
+import { useEffect, useState } from "react";
+import { logoutAdmin, currentAdmin, canAccess, type AdminSession } from "@/lib/adminAuth";
 import {
   LayoutDashboard, ShoppingCart, Package, LayoutGrid, Boxes, Users, Star, Ticket, Zap,
   Gift, Share2, CreditCard, Truck, Megaphone, Bell, BarChart3, FileText, UserCog,
@@ -36,10 +36,13 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [session, setSession] = useState<AdminSession | null>(null);
+  useEffect(() => { setSession(currentAdmin()); }, [pathname]);
+  const visibleNav = session ? NAV.filter((n) => canAccess(session.role, n.href)) : NAV;
 
   const nav = (
     <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Admin">
-      {NAV.map((n) => {
+      {visibleNav.map((n) => {
         const active = n.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(n.href);
         return (
           <Link key={n.href} href={n.href} onClick={() => setOpen(false)}

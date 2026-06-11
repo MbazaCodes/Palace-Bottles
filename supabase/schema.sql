@@ -7,7 +7,7 @@
 create type order_status as enum ('pending','confirmed','processing','packed','shipped','delivered','cancelled');
 create type payment_method as enum ('mpesa','airtel_money','mixx_by_yas','halopesa','cash_on_delivery');
 create type payment_status as enum ('pending','verified','failed');
-create type admin_role as enum ('super_admin','inventory_manager','order_manager','customer_support','marketing_manager');
+create type admin_role as enum ('super_admin','inventory_manager','order_manager','shipping_manager','customer_support','marketing_manager');
 
 -- CATEGORIES --------------------------------------------------
 create table categories (

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
 import AdminTopbar from "./AdminTopbar";
-import { isAdminLoggedIn } from "@/lib/adminAuth";
+import { isAdminLoggedIn, currentAdmin, canAccess } from "@/lib/adminAuth";
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,7 +14,12 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const ok = isAdminLoggedIn();
     setAuthed(ok);
-    if (!ok && !isLogin) router.replace("/admin/login");
+    if (!ok && !isLogin) { router.replace("/admin/login"); return; }
+    // Role gate: staff can only open the modules their role allows
+    if (ok && !isLogin) {
+      const session = currentAdmin();
+      if (session && pathname && !canAccess(session.role, pathname)) router.replace("/admin");
+    }
   }, [pathname, isLogin, router]);
 
   if (isLogin) return <>{children}</>;

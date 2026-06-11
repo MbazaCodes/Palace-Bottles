@@ -75,6 +75,7 @@ export default function AdminLoginPage() {
           <p className="font-bold">Demo credentials (until Supabase Auth is connected):</p>
           <p className="mt-1">Email: {DEMO_ADMIN.email}</p>
           <p>Password: {DEMO_ADMIN.password}</p>
+          <p className="mt-2 border-t border-ice/15 pt-2 text-ice/80">Staff accounts created in <span className="font-semibold">Admin › Staff &amp; Roles</span> sign in here with the email &amp; password the admin set — and only see their role&apos;s modules.</p>
         </div>
 
         <Link href="/" className="mt-5 flex items-center justify-center gap-1.5 text-xs font-semibold text-white/55 hover:text-white">
