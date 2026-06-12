@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
-import { PRODUCTS as SEED, CATEGORIES as SEED_CATS, type CategorySlug } from "@/data/products";
-import { getProducts, getCategories } from "@/lib/productStore";
+import type { Product, CategorySlug } from "@/data/products";
+import { getProducts, getCategories, type Category } from "@/lib/productStore";
 import ProductCard from "@/components/product/ProductCard";
 
 const CAPACITIES = ["500ml", "750ml", "1L", "2L"] as const;
@@ -12,33 +12,43 @@ export default function ShopClient() {
   const params = useSearchParams();
   const initialCat = (params.get("category") as CategorySlug | null) ?? "all";
   const [cat, setCat] = useState<string>(initialCat);
-  const [PRODUCTS, setProducts] = useState(SEED);
-  const [CATEGORIES, setCategories] = useState(SEED_CATS);
-
-  useEffect(() => {
-    const load = () => { setProducts(getProducts()); setCategories(getCategories()); };
-    load();
-    window.addEventListener("focus", load);
-    return () => window.removeEventListener("focus", load);
-  }, []);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [caps, setCaps] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState(120000);
   const [sort, setSort] = useState(params.get("sort") === "new" ? "new" : "recommended");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  const load = useCallback(() => {
+    const p = getProducts();
+    const c = getCategories();
+    setProducts(p);
+    setCategories(c);
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    load();
+    window.addEventListener("focus", load);
+    window.addEventListener("storage", load);
+    const interval = setInterval(load, 3000); // poll every 3s for new products
+    return () => { window.removeEventListener("focus", load); window.removeEventListener("storage", load); clearInterval(interval); };
+  }, [load]);
+
   const filtered = useMemo(() => {
-    let list = PRODUCTS.filter(
+    let list = products.filter(
       (p) =>
         (cat === "all" || p.category === cat) &&
         p.price <= maxPrice &&
-        (caps.length === 0 || p.capacities.some((c) => caps.includes(c)))
+        (caps.length === 0 || (p.capacities ?? []).some((c) => caps.includes(c)))
     );
     if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sort === "rating") list = [...list].sort((a, b) => b.rating - a.rating);
     if (sort === "new") list = [...list].sort((a, b) => (b.badge === "New" ? 1 : 0) - (a.badge === "New" ? 1 : 0));
     return list;
-  }, [cat, caps, maxPrice, sort]);
+  }, [products, cat, caps, maxPrice, sort]);
 
   const toggleCap = (c: string) => setCaps((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
@@ -56,12 +66,12 @@ export default function ShopClient() {
           <div className="mt-3 space-y-2.5 text-sm">
             <label className="flex cursor-pointer items-center gap-2">
               <input type="radio" name="cat" checked={cat === "all"} onChange={() => setCat("all")} className="accent-royal" />
-              All Categories <span className="ml-auto text-xs text-navy/45">({PRODUCTS.length})</span>
+              All Categories <span className="ml-auto text-xs text-navy/45">({products.length})</span>
             </label>
-            {CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <label key={c.slug} className="flex cursor-pointer items-center gap-2">
                 <input type="radio" name="cat" checked={cat === c.slug} onChange={() => setCat(c.slug)} className="accent-royal" />
-                {c.name} <span className="ml-auto text-xs text-navy/45">({PRODUCTS.filter((p) => p.category === c.slug).length})</span>
+                {c.name} <span className="ml-auto text-xs text-navy/45">({products.filter((p) => p.category === c.slug).length})</span>
               </label>
             ))}
           </div>
@@ -92,7 +102,9 @@ export default function ShopClient() {
       {/* Grid */}
       <div>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-navy/65">Showing {filtered.length} of {PRODUCTS.length} products</p>
+          <p className="text-sm text-navy/65">
+            {loaded ? `Showing ${filtered.length} of ${products.length} products` : "Loading products..."}
+          </p>
           <div className="flex items-center gap-2">
             <button onClick={() => setFiltersOpen(!filtersOpen)} className="rounded-xl border border-silver bg-white px-3 py-2 text-sm font-semibold text-navy lg:hidden">
               Filters
@@ -109,8 +121,8 @@ export default function ShopClient() {
             </label>
           </div>
         </div>
-        {filtered.length === 0 ? (
-          <p className="mt-16 text-center text-sm text-navy/55">No products match these filters. Clear a filter to see more.</p>
+        {loaded && filtered.length === 0 ? (
+          <p className="mt-16 text-center text-sm text-navy/55">No products match these filters.</p>
         ) : (
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
             {filtered.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}

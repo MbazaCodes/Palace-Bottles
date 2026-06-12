@@ -12,7 +12,13 @@ const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000);
 
 export default function OffersPage() {
   const [flashProducts, setFlashProducts] = useState(seedFlash());
-  useEffect(() => { setFlashProducts(getFlashSaleProducts()); }, []);
+  useEffect(() => {
+    const load = () => setFlashProducts(getFlashSaleProducts());
+    load();
+    window.addEventListener("focus", load);
+    const t = setInterval(load, 3000);
+    return () => { window.removeEventListener("focus", load); clearInterval(t); };
+  }, []);
   return (
     <>
       <PageHero

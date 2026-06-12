@@ -11,7 +11,8 @@ export default function BestSellers() {
     const load = () => setProducts(getBestSellers());
     load();
     window.addEventListener("focus", load);
-    return () => window.removeEventListener("focus", load);
+    const t = setInterval(load, 3000);
+    return () => { window.removeEventListener("focus", load); clearInterval(t); };
   }, []);
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">

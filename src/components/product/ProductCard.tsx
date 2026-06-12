@@ -34,7 +34,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           <Bottle3D {...product.visual} className="mx-auto w-2/3" />
         </div>
         <h3 className="mt-3 truncate font-semibold text-navy">{product.name}</h3>
-        <p className="text-xs text-navy/55">{product.capacity} · {product.colors[0].name}</p>
+        <p className="text-xs text-navy/55">{product.capacity} · {product.colors?.[0]?.name ?? "Default"}</p>
       </Link>
 
       <div className="mt-2 flex items-center justify-between">
@@ -46,7 +46,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           <Stars rating={product.rating} reviews={product.reviews} />
         </div>
         <button
-          onClick={() => add({ product, color: product.colors[0].name, capacity: product.capacity })}
+          onClick={() => add({ product, color: product.colors?.[0]?.name ?? "Default", capacity: product.capacity })}
           aria-label={`Add ${product.name} to cart`}
           className="rounded-xl border border-silver p-2.5 text-navy transition-colors hover:bg-royal hover:text-white"
         >
