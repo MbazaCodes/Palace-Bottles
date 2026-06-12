@@ -149,11 +149,26 @@ export function getFlashSaleProducts(): Product[] {
 
 export type Category = { slug: CategorySlug; name: string; count: string; tint: string };
 
+const DEFAULT_CATEGORIES: Category[] = [
+  { slug: "thermal-flasks" as CategorySlug, name: "Thermal Flasks", count: "0 Products", tint: "from-slate-200 to-slate-400" },
+  { slug: "water-bottles" as CategorySlug, name: "Water Bottles", count: "0 Products", tint: "from-ice to-blue-300" },
+  { slug: "sports-bottles" as CategorySlug, name: "Sports Bottles", count: "0 Products", tint: "from-emerald-100 to-slate-300" },
+  { slug: "kids-bottles" as CategorySlug, name: "Kids Bottles", count: "0 Products", tint: "from-purple-100 to-purple-300" },
+  { slug: "coffee-tumblers" as CategorySlug, name: "Coffee Tumblers", count: "0 Products", tint: "from-stone-200 to-stone-400" },
+];
+
 export function getCategories(): Category[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return DEFAULT_CATEGORIES;
   const raw = localStorage.getItem(CATEGORIES_KEY);
-  if (!raw) return [];
-  try { return JSON.parse(raw) as Category[]; } catch { return []; }
+  if (!raw) {
+    // Seed with defaults on first load
+    localStorage.setItem(CATEGORIES_KEY, JSON.stringify(DEFAULT_CATEGORIES));
+    return DEFAULT_CATEGORIES;
+  }
+  try {
+    const parsed = JSON.parse(raw) as Category[];
+    return parsed.length > 0 ? parsed : DEFAULT_CATEGORIES;
+  } catch { return DEFAULT_CATEGORIES; }
 }
 
 export function saveCategories(list: Category[]) {

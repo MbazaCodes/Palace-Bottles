@@ -11,14 +11,7 @@ import type { Product, Capacity, CategorySlug } from "@/data/products";
 import { TOP_PRODUCTS, INVENTORY_ROWS } from "@/data/admin";
 import { formatTZS } from "@/lib/constants";
 
-const STATS = [
-  { label: "Total Products", value: "0", delta: "—", up: true },
-  { label: "Active Products", value: "0", delta: "—", up: true },
-  { label: "Out of Stock", value: "0", delta: "—", up: true },
-  { label: "Low Stock Items", value: "0", delta: "—", up: true },
-  { label: "Total Categories", value: "0", delta: "—", up: true },
-  { label: "Views (This Month)", value: "0", delta: "—", up: true },
-];
+// Stats computed dynamically below
 
 export default function AdminProductsPage() {
   const [q, setQ] = useState("");
@@ -33,6 +26,15 @@ export default function AdminProductsPage() {
     document.addEventListener("visibilitychange", load);
     return () => { window.removeEventListener("focus", load); document.removeEventListener("visibilitychange", load); };
   }, []);
+
+  const STATS = [
+    { label: "Total Products", value: String(PRODUCTS.length), delta: "—", up: true },
+    { label: "Active Products", value: String(PRODUCTS.filter((p) => p.stock > 0).length), delta: "—", up: true },
+    { label: "Out of Stock", value: String(PRODUCTS.filter((p) => p.stock === 0).length), delta: "—", up: true },
+    { label: "Low Stock Items", value: String(PRODUCTS.filter((p) => p.stock > 0 && p.stock <= 15).length), delta: "—", up: true },
+    { label: "Total Categories", value: String(CATEGORIES.length), delta: "—", up: true },
+    { label: "Products on Sale", value: String(PRODUCTS.filter((p) => p.oldPrice).length), delta: "—", up: true },
+  ];
 
   const handleDelete = (id: string) => {
     deleteProduct(id);

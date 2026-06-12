@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Calendar, MoreVertical } from "lucide-react";
 import KpiCard from "@/components/admin/KpiCard";
@@ -5,11 +7,39 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import { RevenueChart } from "@/components/admin/Charts";
 import Bottle3D from "@/components/ui/Bottle3D";
 import Countdown from "@/components/ui/Countdown";
-import { KPIS, TOP_PRODUCTS, ADMIN_ORDERS } from "@/data/admin";
+import { ADMIN_ORDERS } from "@/data/admin";
+import { getProducts, getCategories } from "@/lib/productStore";
+import { getAllOrders } from "@/lib/orders";
+import { formatTZS } from "@/lib/constants";
+import type { Product } from "@/data/products";
 
 const flashTarget = new Date(Date.now() + 2 * 86400000 + 14 * 3600000);
 
 export default function AdminDashboard() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState(getAllOrders());
+
+  useEffect(() => {
+    setProducts(getProducts());
+    setOrders(getAllOrders());
+  }, []);
+
+  const KPIS = [
+    { label: "Total Revenue", value: formatTZS(orders.reduce((t, o) => t + o.subtotal, 0)), delta: "—", up: true, vs: "" },
+    { label: "Today\'s Sales", value: formatTZS(orders.filter((o) => new Date(o.createdAt).toDateString() === new Date().toDateString()).reduce((t, o) => t + o.subtotal, 0)), delta: "—", up: true, vs: "" },
+    { label: "Orders Today", value: String(orders.filter((o) => new Date(o.createdAt).toDateString() === new Date().toDateString()).length), delta: "—", up: true, vs: "" },
+    { label: "Pending Orders", value: String(orders.filter((o) => o.status === "Pending").length), delta: "—", up: true, vs: "" },
+    { label: "Total Products", value: String(products.length), delta: "—", up: true, vs: "" },
+    { label: "Active Customers", value: String(new Set(orders.map((o) => o.customer.phone)).size), delta: "—", up: true, vs: "" },
+    { label: "Products in Stock", value: String(products.filter((p) => p.stock > 0).length), delta: "—", up: true, vs: "" },
+    { label: "Categories", value: String(getCategories().length), delta: "—", up: true, vs: "" },
+  ];
+
+  const TOP_PRODUCTS = [...products].sort((a, b) => b.reviews - a.reviews).slice(0, 5).map((p) => ({
+    name: p.name, variant: p.colors[0]?.name ?? "—", sold: p.reviews, revenue: formatTZS(p.price * p.reviews),
+    body: p.visual.body, accent: p.visual.accent, shape: p.visual.shape,
+  }));
+
   return (
     <>
       <div className="flex flex-wrap items-start justify-between gap-3">
