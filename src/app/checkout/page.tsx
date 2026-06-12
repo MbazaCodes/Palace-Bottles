@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -9,6 +10,7 @@ import { useCart, cartSubtotal, itemKey } from "@/store/cart";
 import { formatTZS, TZ_REGIONS, PAYMENT_METHODS } from "@/lib/constants";
 import { createOrder } from "@/lib/orders";
 import Bottle3D from "@/components/ui/Bottle3D";
+import PaymentModal from "@/components/checkout/PaymentModal";
 
 const schema = z.object({
   fullName: z.string().min(3, "Enter your full name"),
@@ -40,9 +42,27 @@ export default function CheckoutPage() {
   const deliveryFee = shipping === "fast" ? 5000 : (isDar ? 0 : 5000);
   const total = subtotal + deliveryFee;
 
+  const [showPayment, setShowPayment] = useState(false);
+  const [formData, setFormData] = useState<FormData | null>(null);
+
   const onSubmit = async (data: FormData) => {
-    const order = await createOrder(data, items, subtotal);
+    if (data.payment === "Cash on Delivery") {
+      // COD: create order directly
+      const order = await createOrder(data, items, subtotal);
+      clear();
+      router.push(`/order-confirmed?id=${order.id}`);
+    } else {
+      // Mobile money: open payment modal
+      setFormData(data);
+      setShowPayment(true);
+    }
+  };
+
+  const handlePaymentSuccess = async () => {
+    if (!formData) return;
+    const order = await createOrder(formData, items, subtotal);
     clear();
+    setShowPayment(false);
     router.push(`/order-confirmed?id=${order.id}`);
   };
 
@@ -167,7 +187,7 @@ export default function CheckoutPage() {
           </div>
           <button type="submit" disabled={isSubmitting}
             className="mt-5 w-full rounded-xl bg-royal py-3.5 text-sm font-bold text-white hover:bg-royal-bright disabled:opacity-50">
-            Place Order
+            {watch("payment") === "Cash on Delivery" ? "Place Order" : "Pay Now"}
           </button>
           <p className="mt-3 flex items-start gap-1.5 text-xs text-navy/55">
             <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-royal" />
@@ -175,6 +195,14 @@ export default function CheckoutPage() {
           </p>
         </aside>
       </form>
+
+      <PaymentModal
+        open={showPayment}
+        onClose={() => setShowPayment(false)}
+        onSuccess={handlePaymentSuccess}
+        method={formData?.payment ?? "M-Pesa"}
+        amount={total}
+      />
     </div>
   );
 }
