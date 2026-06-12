@@ -5,14 +5,7 @@ import { Truck, StickyNote } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 
 type ShipStatus = "Pending" | "Shipped" | "Delivered";
-const INITIAL = [
-  { order: "PB100001", customer: "Juma Mwinyi", destination: "Dar es Salaam, Kinondoni", status: "Pending" as ShipStatus, note: "", updated: "May 18, 2026" },
-  { order: "PB785290", customer: "Asha Mohamed", destination: "Dodoma, Dodoma Urban", status: "Pending" as ShipStatus, note: "Fragile — gift wrap", updated: "May 18, 2026" },
-  { order: "PB785289", customer: "Michael John", destination: "Arusha, Arusha City", status: "Pending" as ShipStatus, note: "", updated: "May 18, 2026" },
-  { order: "PB785288", customer: "Neema Paul", destination: "Mwanza, Nyamagana", status: "Shipped" as ShipStatus, note: "Via Sumry bus — receipt 88421", updated: "May 18, 2026" },
-  { order: "PB785284", customer: "Rehema Ally", destination: "Morogoro, Morogoro Urban", status: "Shipped" as ShipStatus, note: "Boda dispatch 4:30 PM", updated: "May 17, 2026" },
-  { order: "PB785287", customer: "David Patrick", destination: "Mbeya, Mbeya City", status: "Delivered" as ShipStatus, note: "Received by customer", updated: "May 17, 2026" },
-];
+const INITIAL: { order: string; customer: string; destination: string; status: "Pending" | "Shipped" | "Delivered"; note: string; updated: string }[] = [];
 
 const TABS: ("All" | ShipStatus)[] = ["All", "Pending", "Shipped", "Delivered"];
 

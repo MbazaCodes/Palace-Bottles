@@ -1,13 +1,18 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Zap, ArrowRight } from "lucide-react";
 import Countdown from "@/components/ui/Countdown";
+import { getFlashSaleProducts } from "@/lib/productStore";
 import Bottle3D from "@/components/ui/Bottle3D";
 
 // Target rolls forward so the timer is always live
 const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000 + 36 * 60000);
 
 export default function FlashSaleBanner() {
+  const [hasProducts, setHasProducts] = useState(false);
+  useEffect(() => { setHasProducts(getFlashSaleProducts().length > 0); }, []);
+  if (!hasProducts) return null;
   return (
     <section className="mx-auto max-w-7xl px-4">
       <div className="glass-navy relative flex flex-col items-center gap-5 overflow-hidden rounded-2xl px-6 py-6 text-white sm:flex-row sm:justify-between">

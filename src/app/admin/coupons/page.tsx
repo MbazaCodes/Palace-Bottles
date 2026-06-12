@@ -5,12 +5,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 
 interface Coupon { code: string; kind: "Percentage" | "Fixed"; value: number; start: string; end: string; limit: number; used: number; active: boolean }
 
-const INITIAL: Coupon[] = [
-  { code: "KARIBU10", kind: "Percentage", value: 10, start: "May 1, 2026", end: "Jun 30, 2026", limit: 500, used: 213, active: true },
-  { code: "PALACE5000", kind: "Fixed", value: 5000, start: "May 10, 2026", end: "May 31, 2026", limit: 200, used: 88, active: true },
-  { code: "FLASH20", kind: "Percentage", value: 20, start: "May 16, 2026", end: "May 20, 2026", limit: 300, used: 251, active: true },
-  { code: "EID15", kind: "Percentage", value: 15, start: "Mar 28, 2026", end: "Apr 5, 2026", limit: 400, used: 396, active: false },
-];
+const INITIAL: Coupon[] = [];
 
 export default function AdminCouponsPage() {
   const [coupons, setCoupons] = useState(INITIAL);

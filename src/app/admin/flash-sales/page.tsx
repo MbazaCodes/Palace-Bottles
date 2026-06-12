@@ -7,12 +7,7 @@ import Bottle3D from "@/components/ui/Bottle3D";
 
 const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000 + 36 * 60000);
 
-const SALES_INIT = [
-  { name: "Mega Flash Sale", discount: "Up to 30%", products: 8, revenue: "TZS 4,560,000", sold: 228, orders: 156, status: "Live" },
-  { name: "Weekend Hydration Deal", discount: "15%", products: 5, revenue: "TZS 1,840,000", sold: 96, orders: 71, status: "Scheduled" },
-  { name: "Eid Special", discount: "20%", products: 12, revenue: "TZS 6,120,000", sold: 312, orders: 240, status: "Ended" },
-  { name: "Back to School Kids Sale", discount: "25%", products: 6, revenue: "TZS 3,275,000", sold: 187, orders: 142, status: "Ended" },
-];
+const SALES_INIT: { name: string; discount: string; products: number; revenue: string; sold: number; orders: number; status: string }[] = [];
 
 export default function AdminFlashSalesPage() {
   const [sales, setSales] = useState(SALES_INIT);

@@ -11,10 +11,10 @@ const CATEGORIES_KEY = "pb_categories";
 // ── Local fallback ─────────────────────────────────────────────
 
 function getLocalProducts(): Product[] {
-  if (typeof window === "undefined") return SEED_PRODUCTS;
+  if (typeof window === "undefined") return [];
   const raw = localStorage.getItem(PRODUCTS_KEY);
-  if (!raw) { localStorage.setItem(PRODUCTS_KEY, JSON.stringify(SEED_PRODUCTS)); return SEED_PRODUCTS; }
-  try { return JSON.parse(raw) as Product[]; } catch { return SEED_PRODUCTS; }
+  if (!raw) return [];
+  try { return JSON.parse(raw) as Product[]; } catch { return []; }
 }
 
 function saveLocalProducts(list: Product[]) {
@@ -138,10 +138,10 @@ export function getFlashSaleProducts(): Product[] {
 export type Category = { slug: CategorySlug; name: string; count: string; tint: string };
 
 export function getCategories(): Category[] {
-  if (typeof window === "undefined") return SEED_CATEGORIES;
+  if (typeof window === "undefined") return [];
   const raw = localStorage.getItem(CATEGORIES_KEY);
-  if (!raw) { localStorage.setItem(CATEGORIES_KEY, JSON.stringify(SEED_CATEGORIES)); return SEED_CATEGORIES; }
-  try { return JSON.parse(raw) as Category[]; } catch { return SEED_CATEGORIES; }
+  if (!raw) return [];
+  try { return JSON.parse(raw) as Category[]; } catch { return []; }
 }
 
 export function saveCategories(list: Category[]) {

@@ -3,20 +3,9 @@ import { useState } from "react";
 import { Gift, Save } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 
-const POINTS = [
-  { customer: "Juma Mwinyi", phone: "+255 712 345 678", points: 2450, earned: "May 18, 2026", lifetime: 5200 },
-  { customer: "David Patrick", phone: "+255 712 654 321", points: 2100, earned: "May 14, 2026", lifetime: 4100 },
-  { customer: "Asha Mohamed", phone: "+255 684 123 456", points: 1865, earned: "May 17, 2026", lifetime: 3320 },
-  { customer: "Hassan Khamis", phone: "+255 624 333 444", points: 1580, earned: "May 12, 2026", lifetime: 2940 },
-  { customer: "Michael John", phone: "+255 753 987 654", points: 1420, earned: "May 16, 2026", lifetime: 2680 },
-];
+const POINTS: { customer: string; phone: string; points: number; earned: string; lifetime: number }[] = [];
 
-const HISTORY = [
-  { customer: "Juma Mwinyi", change: "+102", reason: "Order PB100001", type: "Earned", date: "May 18, 2026" },
-  { customer: "Neema Paul", change: "-1,000", reason: "Redeemed: TZS 10,000 voucher", type: "Redeemed", date: "May 17, 2026" },
-  { customer: "Asha Mohamed", change: "+75", reason: "Order PB785290", type: "Earned", date: "May 17, 2026" },
-  { customer: "David Patrick", change: "-500", reason: "Redeemed: Free delivery", type: "Redeemed", date: "May 15, 2026" },
-];
+const HISTORY: { customer: string; change: string; reason: string; type: string; date: string }[] = [];
 
 export default function AdminLoyaltyPage() {
   const [saved, setSaved] = useState(false);
@@ -30,7 +19,7 @@ export default function AdminLoyaltyPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[["Members", "3,240"], ["Points Issued", "486,500"], ["Points Redeemed", "212,300"], ["Rewards Value", "TZS 2.12M"]].map(([l, v]) => (
+        {[["Members", "0"], ["Points Issued", "0"], ["Points Redeemed", "0"], ["Rewards Value", "TZS 0"]].map(([l, v]) => (
           <div key={l} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{l}</p>
             <p className="font-display text-xl font-extrabold text-navy">{v}</p>

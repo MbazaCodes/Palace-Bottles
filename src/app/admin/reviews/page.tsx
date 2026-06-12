@@ -5,13 +5,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import Stars from "@/components/ui/Stars";
 
 type ReviewStatus = "Pending" | "Approved" | "Rejected";
-const INITIAL = [
-  { id: 1, product: "Palace Classic Flask 1L", customer: "Amina Juma", rating: 5, comment: "The quality is unmatched! My drinks stay hot for hours. Palace Bottles is now my go-to brand.", date: "May 18, 2026", status: "Pending" as ReviewStatus },
-  { id: 2, product: "Hydro Active Bottle 750ml", customer: "Joseph Mushi", rating: 4, comment: "Great bottle, keeps water cold all day at the gym. Wish it came in green too.", date: "May 17, 2026", status: "Pending" as ReviewStatus },
-  { id: 3, product: "Kids Fun Bottle 500ml", customer: "Neema Said", rating: 5, comment: "My kids love their bottles and they don't leak in the school bag. Asante Palace!", date: "May 17, 2026", status: "Approved" as ReviewStatus },
-  { id: 4, product: "Coffee Tumbler 500ml", customer: "Brian Otieno", rating: 2, comment: "Lid felt loose on mine. Support replaced it quickly though.", date: "May 16, 2026", status: "Approved" as ReviewStatus },
-  { id: 5, product: "Adventure Flask 2L", customer: "Unknown user", rating: 1, comment: "Spam text with suspicious link...", date: "May 15, 2026", status: "Rejected" as ReviewStatus },
-];
+const INITIAL: { id: number; product: string; customer: string; rating: number; comment: string; date: string; status: "Pending" | "Approved" | "Rejected" }[] = [];
 
 const TABS = ["All", "Pending", "Approved", "Rejected"] as const;
 

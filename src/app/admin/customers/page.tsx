@@ -5,11 +5,11 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import { ADMIN_CUSTOMERS } from "@/data/admin";
 
 const STATS = [
-  { label: "Total Customers", value: "8,450", delta: "+12.4%", up: true },
-  { label: "Active Customers", value: "6,230", delta: "+8.7%", up: true },
-  { label: "New This Month", value: "620", delta: "+15.3%", up: true },
-  { label: "Returning Customers", value: "3,980", delta: "+9.1%", up: true },
-  { label: "Total Spent (All Time)", value: "TZS 1.28B", delta: "+18.6%", up: true },
+  { label: "Total Customers", value: "0", delta: "+12.4%", up: true },
+  { label: "Active Customers", value: "0", delta: "+8.7%", up: true },
+  { label: "New This Month", value: "0", delta: "+15.3%", up: true },
+  { label: "Returning Customers", value: "0", delta: "+9.1%", up: true },
+  { label: "Total Spent (All Time)", value: "TZS 0", delta: "+18.6%", up: true },
 ];
 
 function Wa({ phone, name }: { phone: string; name: string }) {
@@ -108,7 +108,7 @@ export default function AdminCustomersPage() {
           <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
             <h2 className="font-display text-base font-bold text-navy">Recently Added Customers</h2>
             <ul className="mt-3 space-y-3">
-              {[["Salim Rajab", "+255 713 222 111", "May 18, 2026"], ["Nadia Hussein", "+255 715 888 222", "May 18, 2026"], ["Hamisi Said", "+255 762 333 444", "May 17, 2026"], ["Mariam Jafari", "+255 657 999 555", "May 17, 2026"], ["Yusuf Rashid", "+255 688 111 333", "May 16, 2026"]].map(([n, p, d]) => (
+              {([] as string[][]).map(([n, p, d]) => (
                 <li key={p} className="flex items-center justify-between gap-2 text-sm">
                   <span><span className="block font-semibold text-navy">{n}</span><span className="text-xs text-navy/50">{p} · {d}</span></span>
                   <Wa phone={p} name={n} />

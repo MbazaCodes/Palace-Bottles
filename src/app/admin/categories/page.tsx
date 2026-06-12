@@ -5,13 +5,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import Bottle3D from "@/components/ui/Bottle3D";
 import { getCategories, saveCategories, type Category } from "@/lib/productStore";
 
-const INITIAL = [
-  { slug: "thermal-flasks", name: "Thermal Flasks", nameSw: "Chupa za Chai", products: 98, active: true, body: "#16181d", accent: "#3a3f4a", shape: "flask" as const },
-  { slug: "water-bottles", name: "Water Bottles", nameSw: "Chupa za Maji", products: 86, active: true, body: "#2563eb", accent: "#60a5fa", shape: "bottle" as const },
-  { slug: "sports-bottles", name: "Sports Bottles", nameSw: "Chupa za Michezo", products: 63, active: true, body: "#16181d", accent: "#475569", shape: "sport" as const },
-  { slug: "kids-bottles", name: "Kids Bottles", nameSw: "Chupa za Watoto", products: 48, active: true, body: "#a78bfa", accent: "#c4b5fd", shape: "kids" as const },
-  { slug: "coffee-tumblers", name: "Coffee Tumblers", nameSw: "Vikombe vya Kahawa", products: 28, active: true, body: "#eef0f4", accent: "#cbd5e1", shape: "tumbler" as const },
-];
+const INITIAL: { slug: string; name: string; nameSw: string; products: number; active: boolean; body: string; accent: string; shape: "flask" | "bottle" | "sport" | "kids" | "tumbler" }[] = [];
 
 export default function AdminCategoriesPage() {
   const [cats, setCats] = useState(INITIAL);

@@ -2,14 +2,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 
 export const metadata = { title: "Referrals — Palace Bottles Admin" };
 
-const REFERRALS = [
-  { referrer: "Juma Mwinyi", referred: "+255 713 222 111", date: "May 18, 2026", converted: true, reward: "500 points", status: "Rewarded" },
-  { referrer: "Asha Mohamed", referred: "+255 715 888 222", date: "May 17, 2026", converted: true, reward: "500 points", status: "Rewarded" },
-  { referrer: "Hassan Khamis", referred: "+255 762 333 444", date: "May 17, 2026", converted: false, reward: "—", status: "Pending" },
-  { referrer: "Neema Paul", referred: "+255 657 999 555", date: "May 16, 2026", converted: true, reward: "500 points", status: "Rewarded" },
-  { referrer: "Michael John", referred: "+255 688 111 333", date: "May 15, 2026", converted: false, reward: "—", status: "Pending" },
-  { referrer: "Rehema Ally", referred: "+255 745 654 987", date: "May 14, 2026", converted: false, reward: "—", status: "Expired" },
-];
+const REFERRALS: { referrer: string; referred: string; date: string; converted: boolean; reward: string; status: string }[] = [];
 
 export default function AdminReferralsPage() {
   return (
@@ -20,7 +13,7 @@ export default function AdminReferralsPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[["Total Referrals", "428"], ["Converted", "186"], ["Conversion Rate", "43.5%"], ["Rewards Issued", "93,000 pts"]].map(([l, v]) => (
+        {[["Total Referrals", "0"], ["Converted", "0"], ["Conversion Rate", "0%"], ["Rewards Issued", "0 pts"]].map(([l, v]) => (
           <div key={l} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{l}</p>
             <p className="font-display text-xl font-extrabold text-navy">{v}</p>

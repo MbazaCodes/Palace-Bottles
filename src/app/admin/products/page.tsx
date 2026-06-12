@@ -11,12 +11,12 @@ import { TOP_PRODUCTS, INVENTORY_ROWS } from "@/data/admin";
 import { formatTZS } from "@/lib/constants";
 
 const STATS = [
-  { label: "Total Products", value: "342", delta: "+8.7%", up: true },
-  { label: "Active Products", value: "315", delta: "+6.4%", up: true },
-  { label: "Out of Stock", value: "12", delta: "-2.1%", up: false },
-  { label: "Low Stock Items", value: "28", delta: "-5.3%", up: false },
-  { label: "Total Categories", value: "5", delta: "No change", up: true },
-  { label: "Views (This Month)", value: "24,560", delta: "+12.1%", up: true },
+  { label: "Total Products", value: "0", delta: "+8.7%", up: true },
+  { label: "Active Products", value: "0", delta: "+6.4%", up: true },
+  { label: "Out of Stock", value: "0", delta: "-2.1%", up: false },
+  { label: "Low Stock Items", value: "0", delta: "-5.3%", up: false },
+  { label: "Total Categories", value: "0", delta: "No change", up: true },
+  { label: "Views (This Month)", value: "0", delta: "+12.1%", up: true },
 ];
 
 export default function AdminProductsPage() {

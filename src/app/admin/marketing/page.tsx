@@ -3,18 +3,9 @@ import { useState } from "react";
 import { Megaphone, Send } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 
-const BANNERS_INIT = [
-  { id: 1, title: "Keep It Hot. Keep It Cold. Keep It Palace.", placement: "Homepage Hero", active: true },
-  { id: 2, title: "Mega Flash Sale — Up to 30% OFF", placement: "Homepage Banner", active: true },
-  { id: 3, title: "Free Delivery Across Tanzania", placement: "Top Bar", active: true },
-  { id: 4, title: "Eid Special Collection", placement: "Homepage Hero", active: false },
-];
+const BANNERS_INIT: { id: number; title: string; placement: string; active: boolean }[] = [];
 
-const CAMPAIGNS = [
-  { name: "June Hydration Month", channel: "WhatsApp + SMS", reach: "6,230", status: "Scheduled", date: "Jun 1 – Jun 30" },
-  { name: "Mega Flash Sale Blast", channel: "SMS", reach: "7,890", status: "Live", date: "May 16 – May 20" },
-  { name: "Mother's Day Gift Guide", channel: "Email", reach: "5,540", status: "Ended", date: "May 5 – May 11" },
-];
+const CAMPAIGNS: { name: string; channel: string; reach: string; status: string; date: string }[] = [];
 
 export default function AdminMarketingPage() {
   const [banners, setBanners] = useState(BANNERS_INIT);

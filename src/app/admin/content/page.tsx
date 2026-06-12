@@ -2,11 +2,7 @@
 import { useState } from "react";
 import { Save, Plus, Trash2 } from "lucide-react";
 
-const FAQS_INIT = [
-  { q: "How long does delivery take?", a: "1–2 days in Dar es Salaam, 2–5 days for other regions and Zanzibar." },
-  { q: "Which payment methods do you accept?", a: "M-Pesa, Airtel Money, Mixx by Yas, HaloPesa and Cash on Delivery (where available)." },
-  { q: "Can I return a product?", a: "Yes — eligible items can be returned within 7 days in original condition." },
-];
+const FAQS_INIT: { q: string; a: string }[] = [];
 
 export default function AdminContentPage() {
   const [faqs, setFaqs] = useState(FAQS_INIT);

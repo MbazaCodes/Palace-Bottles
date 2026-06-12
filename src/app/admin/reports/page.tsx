@@ -4,13 +4,7 @@ import { TOP_PRODUCTS } from "@/data/admin";
 
 export const metadata = { title: "Reports & Analytics — Palace Bottles Admin" };
 
-const CATEGORY_PERF = [
-  { name: "Water Bottles", revenue: "TZS 14.4M", orders: 412, growth: "+18%" },
-  { name: "Thermal Flasks", revenue: "TZS 12.8M", orders: 356, growth: "+22%" },
-  { name: "Sports Bottles", revenue: "TZS 8.2M", orders: 264, growth: "+9%" },
-  { name: "Kids Bottles", revenue: "TZS 6.9M", orders: 231, growth: "+31%" },
-  { name: "Coffee Tumblers", revenue: "TZS 4.5M", orders: 158, growth: "+12%" },
-];
+const CATEGORY_PERF: { name: string; revenue: string; orders: number; growth: string }[] = [];
 
 export default function AdminReportsPage() {
   return (
@@ -21,7 +15,7 @@ export default function AdminReportsPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[["Revenue (This Month)", "TZS 46.8M"], ["Revenue (This Year)", "TZS 216.8M"], ["Avg Order Value", "TZS 68,400"], ["Repeat Purchase Rate", "47%"]].map(([l, v]) => (
+        {[["Revenue (This Month)", "TZS 0"], ["Revenue (This Year)", "TZS 0"], ["Avg Order Value", "TZS 0"], ["Repeat Purchase Rate", "0%"]].map(([l, v]) => (
           <div key={l} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{l}</p>
             <p className="font-display text-lg font-extrabold text-navy">{v}</p>

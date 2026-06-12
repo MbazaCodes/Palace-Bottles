@@ -4,15 +4,7 @@ import { CheckCircle2 } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 
 type PayStatus = "Pending" | "Verified" | "Failed";
-const INITIAL = [
-  { ref: "MP240518A91", order: "PB100001", customer: "Juma Mwinyi", method: "M-Pesa", amount: 102000, status: "Verified" as PayStatus, date: "May 18, 2026 10:32 AM" },
-  { ref: "AM240518B22", order: "PB785290", customer: "Asha Mohamed", method: "Airtel Money", amount: 75000, status: "Verified" as PayStatus, date: "May 18, 2026 09:47 AM" },
-  { ref: "MX240518C40", order: "PB785289", customer: "Michael John", method: "Mixx by Yas", amount: 50000, status: "Pending" as PayStatus, date: "May 18, 2026 09:21 AM" },
-  { ref: "MP240518D15", order: "PB785288", customer: "Neema Paul", method: "M-Pesa", amount: 125000, status: "Verified" as PayStatus, date: "May 18, 2026 08:56 AM" },
-  { ref: "HP240517E08", order: "PB785287", customer: "David Patrick", method: "HaloPesa", amount: 60000, status: "Verified" as PayStatus, date: "May 17, 2026 07:41 PM" },
-  { ref: "—", order: "PB785286", customer: "Fatma Salum", method: "Cash on Delivery", amount: 45000, status: "Pending" as PayStatus, date: "May 17, 2026 06:15 PM" },
-  { ref: "AM240517F73", order: "PB785285", customer: "Hassan Khamis", method: "Airtel Money", amount: 90000, status: "Failed" as PayStatus, date: "May 17, 2026 05:31 PM" },
-];
+const INITIAL: { ref: string; order: string; customer: string; method: string; amount: number; status: "Pending" | "Verified" | "Failed"; date: string }[] = [];
 
 const METHODS = ["All Methods", "M-Pesa", "Airtel Money", "Mixx by Yas", "HaloPesa", "Cash on Delivery"];
 const STATUSES = ["All Status", "Pending", "Verified", "Failed"];
@@ -26,11 +18,11 @@ export default function AdminPaymentsPage() {
   const verify = (ref: string) => setTxs(txs.map((t) => (t.ref === ref ? { ...t, status: "Verified" } : t)));
 
   const SUMMARY = [
-    { label: "M-Pesa", value: "TZS 5.84M", count: 142 },
-    { label: "Airtel Money", value: "TZS 3.12M", count: 88 },
-    { label: "Mixx by Yas", value: "TZS 1.45M", count: 41 },
-    { label: "HaloPesa", value: "TZS 0.92M", count: 27 },
-    { label: "Cash on Delivery", value: "TZS 1.12M", count: 58 },
+    { label: "M-Pesa", value: "TZS 0", count: 0 },
+    { label: "Airtel Money", value: "TZS 0", count: 0 },
+    { label: "Mixx by Yas", value: "TZS 0", count: 0 },
+    { label: "HaloPesa", value: "TZS 0", count: 0 },
+    { label: "Cash on Delivery", value: "TZS 0", count: 0 },
   ];
 
   return (

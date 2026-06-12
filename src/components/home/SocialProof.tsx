@@ -4,16 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Quote, Send } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/SocialIcons";
 
-const TESTIMONIALS = [
-  { name: "Amina Juma", city: "Dar es Salaam", text: "The quality is unmatched! My drinks stay hot for hours. Palace Bottles is now my go-to brand." },
-  { name: "Joseph Mushi", city: "Arusha", text: "Ordered on Monday, delivered to Arusha by Wednesday. The Adventure Flask survived a full safari week." },
-  { name: "Neema Said", city: "Zanzibar", text: "My kids love their bottles and I love that they don't leak in the school bag. Asante Palace!" },
-];
+const TESTIMONIALS: { name: string; city: string; text: string }[] = [];
 
-const IG_TILES = ["#102a6b", "#2563eb", "#dc2626", "#16181d", "#a78bfa", "#16513a"];
+const IG_TILES: string[] = [];
 
 export default function SocialProof() {
   const [idx, setIdx] = useState(0);
+  if (TESTIMONIALS.length === 0 && IG_TILES.length === 0) return null;
   return (
     <section className="mx-auto grid max-w-7xl gap-5 px-4 pb-16 lg:grid-cols-3">
       {/* Testimonials */}

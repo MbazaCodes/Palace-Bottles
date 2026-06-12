@@ -41,15 +41,9 @@ export function CategoryDonut() {
   );
 }
 
-const MONTHLY = [
-  { m: "Dec", revenue: 28500000 }, { m: "Jan", revenue: 32100000 }, { m: "Feb", revenue: 29800000 },
-  { m: "Mar", revenue: 38400000 }, { m: "Apr", revenue: 41200000 }, { m: "May", revenue: 46800000 },
-];
+const MONTHLY: { m: string; revenue: number }[] = [];
 
-const GROWTH = [
-  { m: "Dec", customers: 5210 }, { m: "Jan", customers: 5840 }, { m: "Feb", customers: 6390 },
-  { m: "Mar", customers: 7120 }, { m: "Apr", customers: 7830 }, { m: "May", customers: 8450 },
-];
+const GROWTH: { m: string; customers: number }[] = [];
 
 export function MonthlyRevenueBar() {
   return (

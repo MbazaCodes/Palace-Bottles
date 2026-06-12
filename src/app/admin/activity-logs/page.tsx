@@ -2,16 +2,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-const LOGS = [
-  { user: "Palace Admin", action: "Order Updated", entity: "Order PB785290 → Processing", date: "May 18, 2026 09:50 AM", ip: "197.250.12.44" },
-  { user: "Zawadi Komba", action: "Order Updated", entity: "Order PB785288 → Shipped", date: "May 18, 2026 09:02 AM", ip: "197.250.18.91" },
-  { user: "Frank Mallya", action: "Stock Changed", entity: "Palace Classic Flask 1L +50 units", date: "May 18, 2026 08:15 AM", ip: "41.222.55.10" },
-  { user: "Palace Admin", action: "Coupon Created", entity: "FLASH20 (20% off)", date: "May 16, 2026 11:40 AM", ip: "197.250.12.44" },
-  { user: "Palace Admin", action: "Flash Sale Created", entity: "Mega Flash Sale", date: "May 16, 2026 11:35 AM", ip: "197.250.12.44" },
-  { user: "Grace Mhando", action: "Review Approved", entity: "Review #3 on Kids Fun Bottle", date: "May 15, 2026 02:20 PM", ip: "102.68.77.31" },
-  { user: "Frank Mallya", action: "Product Added", entity: "Aqua Flow Bottle 500ml", date: "May 14, 2026 04:05 PM", ip: "41.222.55.10" },
-  { user: "Palace Admin", action: "Settings Updated", entity: "Mobile money numbers", date: "May 13, 2026 10:12 AM", ip: "197.250.12.44" },
-];
+const LOGS: { user: string; action: string; entity: string; date: string; ip: string }[] = [];
 
 const ACTION_COLORS: Record<string, string> = {
   "Order Updated": "bg-blue-100 text-blue-700",

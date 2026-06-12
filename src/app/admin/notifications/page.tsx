@@ -3,11 +3,7 @@ import { useState } from "react";
 import { Send, MessageSquare, Mail, Smartphone } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 
-const HISTORY_INIT = [
-  { channel: "WhatsApp", audience: "All Customers (6,230)", message: "Mega Flash Sale is LIVE! Up to 30% off — shop now 🔥", date: "May 16, 2026", status: "Sent" },
-  { channel: "SMS", audience: "Dar es Salaam (2,840)", message: "Palace Bottles: same-day delivery now available in Dar!", date: "May 14, 2026", status: "Sent" },
-  { channel: "Email", audience: "Loyalty Members (3,240)", message: "Your points expire soon — redeem before May 31.", date: "May 12, 2026", status: "Sent" },
-];
+const HISTORY_INIT: { channel: string; audience: string; message: string; date: string; status: string }[] = [];
 
 const CHANNELS = [
   { name: "SMS", icon: Smartphone },

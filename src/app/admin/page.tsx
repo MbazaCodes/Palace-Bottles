@@ -36,7 +36,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-display text-base font-bold text-navy">Revenue Overview</h2>
-              <p className="font-display text-2xl font-extrabold text-navy">TZS 12,450,000 <span className="ml-1 rounded-md bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-700">+18.2%</span></p>
+              <p className="font-display text-2xl font-extrabold text-navy">TZS 0 <span className="ml-1 rounded-md bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-700">—</span></p>
             </div>
             <span className="rounded-xl border border-silver px-3 py-1.5 text-xs font-semibold text-navy/65">This Week</span>
           </div>
@@ -119,9 +119,9 @@ export default function AdminDashboard() {
             <div className="mt-1.5 h-2 rounded-full bg-silver"><div className="h-2 w-[72%] rounded-full bg-gradient-to-r from-royal to-royal-bright" /></div>
           </div>
           <dl className="mt-4 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Total Sales</dt><dd className="font-display text-sm font-bold text-navy">TZS 4.56M</dd></div>
-            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Items Sold</dt><dd className="font-display text-sm font-bold text-navy">228</dd></div>
-            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Orders</dt><dd className="font-display text-sm font-bold text-navy">156</dd></div>
+            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Total Sales</dt><dd className="font-display text-sm font-bold text-navy">TZS 0</dd></div>
+            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Items Sold</dt><dd className="font-display text-sm font-bold text-navy">0</dd></div>
+            <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Orders</dt><dd className="font-display text-sm font-bold text-navy">0</dd></div>
           </dl>
           <div className="mt-4 rounded-xl border border-silver p-3">
             <p className="text-[10px] text-navy/55">Conversion Rate</p>
