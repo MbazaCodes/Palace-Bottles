@@ -73,7 +73,7 @@ export default function AdminOrdersPage() {
             className={`rounded-2xl border bg-white p-3.5 text-left shadow-card transition-colors ${status === s.label || (s.label === "All Orders" && status === "All Status") ? "border-royal" : "border-silver"}`}>
             <p className="text-xs text-navy/55">{s.label}</p>
             <p className="font-display text-xl font-extrabold text-navy">{s.value}</p>
-            <p className={`text-[11px] font-semibold ${s.up ? "text-emerald-600" : "text-red-500"}`}>{s.delta} vs last week</p>
+            <p className={`text-[11px] font-semibold ${s.up ? "text-emerald-600" : "text-red-500"}`}>{s.delta}</p>
           </button>
         ))}
       </div>
@@ -138,7 +138,7 @@ export default function AdminOrdersPage() {
             ))}
           </tbody>
         </table>
-        <p className="px-4 py-3 text-xs text-navy/55">Showing 1 to {rows.length} of 356 orders</p>
+        <p className="px-4 py-3 text-xs text-navy/55">Showing {rows.length} order{rows.length !== 1 ? "s" : ""}</p>
       </div>
     </>
   );

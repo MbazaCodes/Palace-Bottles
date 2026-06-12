@@ -42,7 +42,7 @@ export default function AdminCustomersPage() {
           <div key={s.label} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{s.label}</p>
             <p className="font-display text-lg font-extrabold text-navy">{s.value}</p>
-            <p className="text-[11px] font-semibold text-emerald-600">{s.delta} vs last month</p>
+            <p className="text-[11px] font-semibold text-emerald-600">{s.delta}</p>
           </div>
         ))}
       </div>
@@ -91,7 +91,7 @@ export default function AdminCustomersPage() {
                 ))}
               </tbody>
             </table>
-            <p className="px-4 py-3 text-xs text-navy/55">Showing 1 to {rows.length} of 8,450 customers</p>
+            <p className="px-4 py-3 text-xs text-navy/55">Showing {rows.length} customer{rows.length !== 1 ? "s" : ""}</p>
           </div>
         </div>
 
@@ -100,9 +100,9 @@ export default function AdminCustomersPage() {
             <h2 className="font-display text-base font-bold text-navy">Quick Contact</h2>
             <p className="text-xs text-navy/50">Contact your customers directly</p>
             <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
-              <div className="rounded-xl bg-emerald-50 p-3"><dd className="font-display text-sm font-bold text-navy">6,230</dd><dt className="text-[10px] text-navy/55">WhatsApp</dt></div>
-              <div className="rounded-xl bg-blue-50 p-3"><dd className="font-display text-sm font-bold text-navy">7,890</dd><dt className="text-[10px] text-navy/55">Phone Numbers</dt></div>
-              <div className="rounded-xl bg-red-50 p-3"><dd className="font-display text-sm font-bold text-navy">5,540</dd><dt className="text-[10px] text-navy/55">Email Addresses</dt></div>
+              <div className="rounded-xl bg-emerald-50 p-3"><dd className="font-display text-sm font-bold text-navy">0</dd><dt className="text-[10px] text-navy/55">WhatsApp</dt></div>
+              <div className="rounded-xl bg-blue-50 p-3"><dd className="font-display text-sm font-bold text-navy">0</dd><dt className="text-[10px] text-navy/55">Phone Numbers</dt></div>
+              <div className="rounded-xl bg-red-50 p-3"><dd className="font-display text-sm font-bold text-navy">0</dd><dt className="text-[10px] text-navy/55">Email Addresses</dt></div>
             </dl>
           </div>
           <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">

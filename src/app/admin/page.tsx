@@ -115,8 +115,8 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="mt-4">
-            <div className="flex justify-between text-xs"><span className="text-navy/55">Sales Progress</span><span className="font-bold text-navy">72%</span></div>
-            <div className="mt-1.5 h-2 rounded-full bg-silver"><div className="h-2 w-[72%] rounded-full bg-gradient-to-r from-royal to-royal-bright" /></div>
+            <div className="flex justify-between text-xs"><span className="text-navy/55">Sales Progress</span><span className="font-bold text-navy">0%</span></div>
+            <div className="mt-1.5 h-2 rounded-full bg-silver"><div className="h-2 w-[0%] rounded-full bg-gradient-to-r from-royal to-royal-bright" /></div>
           </div>
           <dl className="mt-4 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl bg-frost p-3"><dt className="text-[10px] text-navy/55">Total Sales</dt><dd className="font-display text-sm font-bold text-navy">TZS 0</dd></div>
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
           </dl>
           <div className="mt-4 rounded-xl border border-silver p-3">
             <p className="text-[10px] text-navy/55">Conversion Rate</p>
-            <p className="font-display text-lg font-extrabold text-navy">8.42% <span className="text-xs font-semibold text-emerald-600">↑ 12.5% vs last sale</span></p>
+            <p className="font-display text-lg font-extrabold text-navy">0% <span className="text-xs font-semibold text-navy/40">—</span></p>
           </div>
         </div>
       </div>

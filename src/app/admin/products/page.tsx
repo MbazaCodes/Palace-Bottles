@@ -11,12 +11,12 @@ import { TOP_PRODUCTS, INVENTORY_ROWS } from "@/data/admin";
 import { formatTZS } from "@/lib/constants";
 
 const STATS = [
-  { label: "Total Products", value: "0", delta: "+8.7%", up: true },
-  { label: "Active Products", value: "0", delta: "+6.4%", up: true },
-  { label: "Out of Stock", value: "0", delta: "-2.1%", up: false },
-  { label: "Low Stock Items", value: "0", delta: "-5.3%", up: false },
-  { label: "Total Categories", value: "0", delta: "No change", up: true },
-  { label: "Views (This Month)", value: "0", delta: "+12.1%", up: true },
+  { label: "Total Products", value: "0", delta: "—", up: true },
+  { label: "Active Products", value: "0", delta: "—", up: true },
+  { label: "Out of Stock", value: "0", delta: "—", up: true },
+  { label: "Low Stock Items", value: "0", delta: "—", up: true },
+  { label: "Total Categories", value: "0", delta: "—", up: true },
+  { label: "Views (This Month)", value: "0", delta: "—", up: true },
 ];
 
 export default function AdminProductsPage() {
@@ -66,7 +66,7 @@ export default function AdminProductsPage() {
           <div key={s.label} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
             <p className="text-xs text-navy/55">{s.label}</p>
             <p className="font-display text-xl font-extrabold text-navy">{s.value}</p>
-            <p className={`text-[11px] font-semibold ${s.up ? "text-emerald-600" : "text-red-500"}`}>{s.delta}{s.delta !== "No change" && " vs last month"}</p>
+            <p className={`text-[11px] font-semibold ${s.up ? "text-emerald-600" : "text-red-500"}`}>{s.delta}</p>
           </div>
         ))}
       </div>
@@ -121,7 +121,7 @@ export default function AdminProductsPage() {
                 ))}
               </tbody>
             </table>
-            <p className="px-4 py-3 text-xs text-navy/55">Showing 1 to {rows.length} of 342 products</p>
+            <p className="px-4 py-3 text-xs text-navy/55">Showing {rows.length} product{rows.length !== 1 ? "s" : ""}</p>
           </div>
         </div>
 
