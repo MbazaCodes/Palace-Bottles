@@ -42,8 +42,8 @@ export default function Footer() {
         <div>
           <h3 className="font-display text-base font-bold">Customer Service</h3>
           <ul className="mt-3 space-y-2.5 text-sm text-white/70">
-            {["Shipping & Delivery", "Returns & Refunds", "Payment Methods", "FAQs", "Privacy Policy"].map((t) => (
-              <li key={t}><Link href="/contact" className="hover:text-ice">{t}</Link></li>
+            {[["Shipping & Delivery", "/shipping-delivery"], ["Returns & Refunds", "/returns-refunds"], ["Payment Methods", "/payment-methods"], ["FAQs", "/faqs"], ["Privacy Policy", "/privacy-policy"]].map(([t, h]) => (
+              <li key={t}><Link href={h} className="hover:text-ice">{t}</Link></li>
             ))}
           </ul>
         </div>
@@ -56,8 +56,8 @@ export default function Footer() {
             <li className="flex items-start gap-2"><MapPin className="mt-0.5 size-4 shrink-0 text-ice" />{BRAND.address}</li>
           </ul>
           <div className="mt-4 flex gap-3">
-            <a href="#" aria-label="Instagram" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><InstagramIcon /></a>
-            <a href="#" aria-label="Facebook" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><FacebookIcon /></a>
+            <a href="https://instagram.com/palacebottles" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><InstagramIcon /></a>
+            <a href="https://facebook.com/palacebottles" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><FacebookIcon /></a>
             <a href={`https://wa.me/${BRAND.phoneRaw}`} aria-label="WhatsApp" className="rounded-full bg-white/10 p-2 hover:bg-white/20">
               <svg viewBox="0 0 24 24" className="size-4 fill-white"><path d="M12.05 2a9.9 9.9 0 0 0-8.57 14.86L2 22l5.27-1.38A9.9 9.9 0 1 0 12.05 2z" /></svg>
             </a>

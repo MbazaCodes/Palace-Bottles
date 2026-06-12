@@ -24,7 +24,8 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           {product.badge}
         </span>
       )}
-      <button aria-label={`Add ${product.name} to wishlist`} className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 text-navy/50 shadow-card hover:text-red-500">
+      <button onClick={(e) => { e.preventDefault(); const h = e.currentTarget; h.classList.toggle("text-red-500"); h.querySelector("svg")?.classList.toggle("fill-red-500"); }}
+        aria-label={`Add ${product.name} to wishlist`} className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 text-navy/50 shadow-card hover:text-red-500">
         <Heart className="size-4" />
       </button>
 

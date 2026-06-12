@@ -47,7 +47,7 @@ export default function SocialProof() {
             <h3 className="flex items-center gap-2 font-display text-lg font-bold text-navy"><InstagramIcon className="size-5" /> Follow Us On Instagram</h3>
             <p className="text-xs text-navy/55">@palacebottles</p>
           </div>
-          <a href="#" className="rounded-xl bg-navy px-4 py-2 text-xs font-bold text-white hover:bg-navy-deep">Follow Us</a>
+          <a href="https://instagram.com/palacebottles" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-navy px-4 py-2 text-xs font-bold text-white hover:bg-navy-deep">Follow Us</a>
         </div>
         <div className="mt-4 grid grid-cols-3 gap-2">
           {IG_TILES.map((c, i) => (

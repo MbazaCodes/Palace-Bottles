@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Search, Heart, ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart, cartCount } from "@/store/cart";
 import { CATEGORIES } from "@/data/products";
 import Logo from "./Logo";
@@ -60,7 +60,6 @@ export default function Navbar() {
 
         <div className="flex items-center gap-1.5">
           <Link href="/shop" aria-label="Search products" className="rounded-full p-2 hover:bg-white/10"><Search className="size-5" /></Link>
-          <button aria-label="Wishlist" className="hidden rounded-full p-2 hover:bg-white/10 sm:block"><Heart className="size-5" /></button>
           <button onClick={() => setOpen(true)} aria-label={`Open cart, ${count} items`} className="relative rounded-full p-2 hover:bg-white/10">
             <ShoppingCart className="size-5" />
             {count > 0 && (
