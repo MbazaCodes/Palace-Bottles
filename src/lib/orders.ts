@@ -13,16 +13,7 @@ export interface Order {
 }
 
 const KEY = "pb_orders";
-const ORDER_VERSION_KEY = "pb_orders_version";
-const ORDER_VERSION = "2";
-
-// Clear stale orders from previous deployments
-if (typeof window !== "undefined") {
-  if (localStorage.getItem(ORDER_VERSION_KEY) !== ORDER_VERSION) {
-    localStorage.removeItem(KEY);
-    localStorage.setItem(ORDER_VERSION_KEY, ORDER_VERSION);
-  }
-}
+// No version clearing — orders persist
 
 // ── Local fallback ─────────────────────────────────────────────
 

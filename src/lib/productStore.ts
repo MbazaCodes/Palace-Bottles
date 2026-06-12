@@ -7,18 +7,7 @@ import { PRODUCTS as SEED_PRODUCTS, CATEGORIES as SEED_CATEGORIES, type Product,
 
 const PRODUCTS_KEY = "pb_products";
 const CATEGORIES_KEY = "pb_categories";
-const VERSION_KEY = "pb_store_version";
-const CURRENT_VERSION = "2";  // bump this to clear old data
-
-// Clear stale localStorage from previous deployments
-if (typeof window !== "undefined") {
-  const v = localStorage.getItem(VERSION_KEY);
-  if (v !== CURRENT_VERSION) {
-    localStorage.removeItem(PRODUCTS_KEY);
-    localStorage.removeItem(CATEGORIES_KEY);
-    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
-  }
-}
+// No version clearing — products persist across deployments
 
 // ── Local fallback ─────────────────────────────────────────────
 
