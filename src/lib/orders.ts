@@ -20,7 +20,8 @@ export interface Order {
 export async function createOrder(
   data: { fullName: string; phone: string; email?: string; region: string; district: string; address: string; payment: string },
   items: CartItem[],
-  subtotal: number
+  subtotal: number,
+  options?: { paid?: boolean; paymentReference?: string }
 ): Promise<Order> {
   const order: Order = {
     id: `PB${Math.floor(100000 + Math.random() * 900000)}`,
@@ -43,6 +44,8 @@ export async function createOrder(
         fullName: data.fullName, phone: data.phone, email: data.email,
         region: data.region, district: data.district, address: data.address,
         payment: data.payment, subtotal,
+        paid: options?.paid ?? false,
+        paymentReference: options?.paymentReference,
         items: items.map((i) => ({
           name: i.product.name, variant: `${i.capacity} / ${i.color}`, price: i.product.price, qty: i.qty,
         })),

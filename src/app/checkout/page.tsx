@@ -60,7 +60,7 @@ export default function CheckoutPage() {
 
   const handlePaymentSuccess = async () => {
     if (!formData) return;
-    const order = await createOrder(formData, items, subtotal);
+    const order = await createOrder(formData, items, subtotal, { paid: true, paymentReference: `MOB-${Date.now()}` });
     clear();
     setShowPayment(false);
     router.push(`/order-confirmed?id=${order.id}`);

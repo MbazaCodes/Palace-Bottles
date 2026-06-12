@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   if (!supabase) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
 
   const body = await req.json();
-  const { fullName, phone, email, region, district, address, payment, subtotal, items } = body;
+  const { fullName, phone, email, region, district, address, payment, subtotal, items, paid, paymentReference } = body;
 
   // Upsert customer
   const { data: customer } = await supabase
@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
       region,
       district,
       address,
+      payment_status: paid ? "verified" : "pending",
+      payment_reference: paymentReference || null,
     })
     .select("id, order_number")
     .single();
@@ -80,11 +82,16 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   if (!supabaseAdmin) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
 
-  const { order_number, status } = await req.json();
+  const { order_number, status, payment_status, payment_reference } = await req.json();
+
+  const updates: Record<string, unknown> = {};
+  if (status) updates.status = status;
+  if (payment_status) updates.payment_status = payment_status;
+  if (payment_reference) updates.payment_reference = payment_reference;
 
   const { error } = await supabaseAdmin
     .from("orders")
-    .update({ status })
+    .update(updates)
     .eq("order_number", order_number);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
