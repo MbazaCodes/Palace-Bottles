@@ -11,11 +11,7 @@ export default function Categories() {
   const [CATEGORIES, setCategories] = useState(SEED_CATS);
   const [PRODUCTS, setProducts] = useState(SEED);
   useEffect(() => {
-    const load = () => { setCategories(getCategories()); setProducts(getProducts()); };
-    load();
-    window.addEventListener("focus", load);
-    const t = setInterval(load, 3000);
-    return () => { window.removeEventListener("focus", load); clearInterval(t); };
+    Promise.all([getCategories(), getProducts()]).then(([c, p]) => { setCategories(c); setProducts(p); });
   }, []);
   return (
     <section id="categories" className="mx-auto max-w-7xl px-4 py-16">

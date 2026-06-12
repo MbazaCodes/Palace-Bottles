@@ -7,13 +7,7 @@ import ProductCard from "@/components/product/ProductCard";
 
 export default function BestSellers() {
   const [products, setProducts] = useState(seedBestSellers());
-  useEffect(() => {
-    const load = () => setProducts(getBestSellers());
-    load();
-    window.addEventListener("focus", load);
-    const t = setInterval(load, 3000);
-    return () => { window.removeEventListener("focus", load); clearInterval(t); };
-  }, []);
+  useEffect(() => { getBestSellers().then(setProducts); }, []);
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">
       <div className="flex items-center justify-between">

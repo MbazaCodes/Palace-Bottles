@@ -12,31 +12,18 @@ export interface Order {
   subtotal: number;
 }
 
-const KEY = "pb_orders";
-// No version clearing — orders persist
-
-// ── Local fallback ─────────────────────────────────────────────
-
-function getLocal(): Order[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(KEY) ?? "[]") as Order[]; } catch { return []; }
-}
-
-function saveLocal(orders: Order[]) {
-  if (typeof window !== "undefined") localStorage.setItem(KEY, JSON.stringify(orders));
-}
-
-// ── Create order (API + local) ─────────────────────────────────
+/**
+ * Orders — all reads/writes go through Supabase API routes.
+ * No localStorage.
+ */
 
 export async function createOrder(
   data: { fullName: string; phone: string; email?: string; region: string; district: string; address: string; payment: string },
   items: CartItem[],
   subtotal: number
 ): Promise<Order> {
-  // Build order locally first
-  const localId = `PB${Math.floor(100000 + Math.random() * 900000)}`;
   const order: Order = {
-    id: localId,
+    id: `PB${Math.floor(100000 + Math.random() * 900000)}`,
     createdAt: new Date().toISOString(),
     status: "Pending",
     customer: { fullName: data.fullName, phone: data.phone, email: data.email || undefined },
@@ -48,86 +35,90 @@ export async function createOrder(
     subtotal,
   };
 
-  // Try Supabase API
   try {
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        fullName: data.fullName,
-        phone: data.phone,
-        email: data.email,
-        region: data.region,
-        district: data.district,
-        address: data.address,
-        payment: data.payment,
-        subtotal,
+        fullName: data.fullName, phone: data.phone, email: data.email,
+        region: data.region, district: data.district, address: data.address,
+        payment: data.payment, subtotal,
         items: items.map((i) => ({
-          name: i.product.name,
-          variant: `${i.capacity} / ${i.color}`,
-          price: i.product.price,
-          qty: i.qty,
+          name: i.product.name, variant: `${i.capacity} / ${i.color}`, price: i.product.price, qty: i.qty,
         })),
       }),
     });
     if (res.ok) {
       const result = await res.json();
-      order.id = result.order_number ?? localId;
+      order.id = result.order_number ?? order.id;
     }
-  } catch { /* API unavailable — local ID is fine */ }
+  } catch { /* order ID stays as local fallback */ }
 
-  // Always save locally too
-  const all = getLocal();
-  saveLocal([order, ...all]);
   return order;
 }
 
-// ── Read orders ────────────────────────────────────────────────
-
-export function getOrder(id: string): Order | undefined {
-  return getLocal().find((o) => o.id.toLowerCase() === id.toLowerCase());
-}
-
-/** Try Supabase API for tracking, fall back to local */
 export async function trackOrder(id: string): Promise<Order | undefined> {
-  // Try API first
   try {
-    const res = await fetch(`/api/orders/track?id=${encodeURIComponent(id)}`);
-    if (res.ok) {
-      const d = await res.json();
-      return {
-        id: d.order_number,
-        createdAt: d.created_at,
-        status: d.status?.charAt(0).toUpperCase() + d.status?.slice(1),
-        customer: { fullName: d.customer?.full_name, phone: d.customer?.phone, email: d.customer?.email },
-        delivery: { region: d.region, district: d.district, address: d.address },
-        payment: d.payment_method?.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()),
-        items: (d.items ?? []).map((i: Record<string, unknown>) => ({
-          name: i.product_name, capacity: "", color: "", qty: i.qty, price: i.unit_price,
-          visual: { body: "#16181d", accent: "#3a3f4a", shape: "bottle" as const },
-        })),
-        subtotal: d.subtotal,
-      };
-    }
-  } catch { /* fall back */ }
-
-  // Fall back to local
-  return getLocal().find((o) => o.id.toLowerCase() === id.toLowerCase());
+    const res = await fetch(`/api/orders/track?id=${encodeURIComponent(id)}`, { cache: "no-store" });
+    if (!res.ok) return undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const d: any = await res.json();
+    const pmMap: Record<string, string> = {
+      mpesa: "M-Pesa", airtel_money: "Airtel Money", mixx_by_yas: "Mixx by Yas",
+      halopesa: "HaloPesa", cash_on_delivery: "Cash on Delivery",
+    };
+    const statusMap = (s: string) => s?.charAt(0).toUpperCase() + s?.slice(1);
+    return {
+      id: d.order_number,
+      createdAt: d.created_at,
+      status: statusMap(d.status) as OrderStatus,
+      customer: { fullName: d.customer?.full_name ?? "—", phone: d.customer?.phone ?? "—", email: d.customer?.email },
+      delivery: { region: d.region ?? "—", district: d.district ?? "—", address: d.address ?? "—" },
+      payment: pmMap[d.payment_method] ?? d.payment_method ?? "—",
+      items: (d.items ?? []).map((i: { product_name: string; variant?: string; unit_price: number; qty: number }) => ({
+        name: i.product_name, capacity: i.variant?.split("/")[0]?.trim() ?? "", color: i.variant?.split("/")[1]?.trim() ?? "",
+        qty: i.qty, price: i.unit_price,
+        visual: { body: "#16181d", accent: "#3a3f4a", shape: "bottle" as const },
+      })),
+      subtotal: Number(d.subtotal ?? 0),
+    };
+  } catch { return undefined; }
 }
 
-export function getAllOrders(): Order[] {
-  return getLocal();
+export async function getAllOrders(): Promise<Order[]> {
+  try {
+    const res = await fetch("/api/orders", { cache: "no-store" });
+    if (!res.ok) return [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any[] = await res.json();
+    if (!Array.isArray(data)) return [];
+    const pmMap: Record<string, string> = { mpesa: "M-Pesa", airtel_money: "Airtel Money", mixx_by_yas: "Mixx by Yas", halopesa: "HaloPesa", cash_on_delivery: "Cash on Delivery" };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.map((d: any) => ({
+      id: d.order_number ?? d.id,
+      createdAt: d.created_at,
+      status: (d.status?.charAt(0).toUpperCase() + d.status?.slice(1)) as OrderStatus,
+      customer: { fullName: d.customer?.full_name ?? "—", phone: d.customer?.phone ?? "—", email: d.customer?.email },
+      delivery: { region: d.region ?? "—", district: d.district ?? "—", address: d.address ?? "—" },
+      payment: pmMap[d.payment_method] ?? d.payment_method ?? "—",
+      items: (d.items ?? []).map((i: { product_name: string; variant?: string; unit_price: number; qty: number }) => ({
+        name: i.product_name, capacity: "", color: "", qty: i.qty, price: i.unit_price,
+        visual: { body: "#16181d", accent: "#3a3f4a", shape: "bottle" as const },
+      })),
+      subtotal: Number(d.subtotal ?? 0),
+    }));
+  } catch { return []; }
 }
 
-export function updateOrderStatus(id: string, status: OrderStatus): void {
-  // Update local
-  const all = getLocal();
-  saveLocal(all.map((o) => (o.id.toLowerCase() === id.toLowerCase() ? { ...o, status } : o)));
-
-  // Also try API
-  fetch("/api/orders", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ order_number: id, status: status.toLowerCase() }),
-  }).catch(() => { /* ok */ });
+export async function updateOrderStatus(id: string, status: OrderStatus): Promise<void> {
+  try {
+    await fetch("/api/orders", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_number: id, status: status.toLowerCase() }),
+    });
+  } catch { /* silent */ }
 }
+
+// Legacy sync stubs for components that still call these
+export function getOrder(): undefined { return undefined; }

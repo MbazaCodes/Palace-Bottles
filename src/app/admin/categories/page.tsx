@@ -11,18 +11,18 @@ export default function AdminCategoriesPage() {
   const [cats, setCats] = useState(INITIAL);
 
   useEffect(() => {
-    const stored = getCategories();
-    if (stored.length > 0) {
-      setCats(stored.map((c) => {
-        const seed = INITIAL.find((s) => s.slug === c.slug);
-        return seed ?? { slug: c.slug as string, name: c.name, nameSw: "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" as const };
-      }));
-    }
+    getCategories().then((stored) => {
+      if (stored.length > 0) {
+        setCats(stored.map((c) => {
+          const seed = INITIAL.find((s) => s.slug === c.slug);
+          return seed ?? { slug: c.slug as string, name: c.name, nameSw: "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" as const };
+        }));
+      }
+    });
   }, []);
 
   const persist = (newCats: typeof INITIAL) => {
     setCats(newCats);
-    saveCategories(newCats.map((c) => ({ slug: c.slug as never, name: c.name, count: `${c.products}+ Products`, tint: "from-slate-200 to-slate-400" })));
   };
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");

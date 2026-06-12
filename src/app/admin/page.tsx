@@ -9,7 +9,7 @@ import Bottle3D from "@/components/ui/Bottle3D";
 import Countdown from "@/components/ui/Countdown";
 import { ADMIN_ORDERS } from "@/data/admin";
 import { getProducts, getCategories } from "@/lib/productStore";
-import { getAllOrders } from "@/lib/orders";
+import { getAllOrders, type Order } from "@/lib/orders";
 import { formatTZS } from "@/lib/constants";
 import type { Product } from "@/data/products";
 
@@ -17,11 +17,13 @@ const flashTarget = new Date(Date.now() + 2 * 86400000 + 14 * 3600000);
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [orders, setOrders] = useState(getAllOrders());
+  const [catCount, setCatCount] = useState(0);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    setProducts(getProducts());
-    setOrders(getAllOrders());
+    getProducts().then(setProducts);
+    getCategories().then((c) => setCatCount(c.length));
+    getAllOrders().then(setOrders);
   }, []);
 
   const KPIS = [
@@ -32,7 +34,7 @@ export default function AdminDashboard() {
     { label: "Total Products", value: String(products.length), delta: "—", up: true, vs: "" },
     { label: "Active Customers", value: String(new Set(orders.map((o) => o.customer.phone)).size), delta: "—", up: true, vs: "" },
     { label: "Products in Stock", value: String(products.filter((p) => p.stock > 0).length), delta: "—", up: true, vs: "" },
-    { label: "Categories", value: String(getCategories().length), delta: "—", up: true, vs: "" },
+    { label: "Categories", value: String(catCount), delta: "—", up: true, vs: "" },
   ];
 
   const TOP_PRODUCTS = [...products].sort((a, b) => b.reviews - a.reviews).slice(0, 5).map((p) => ({

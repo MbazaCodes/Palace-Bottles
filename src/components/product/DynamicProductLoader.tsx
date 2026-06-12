@@ -11,12 +11,15 @@ export default function DynamicProductLoader({ slug }: { slug: string }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const p = getProductBySlug(slug);
-    if (p) {
-      setProduct(p);
-      setRelated(getProductsByCategory(p.category).filter((r) => r.id !== p.id).slice(0, 4));
-    }
-    setChecked(true);
+    (async () => {
+      const p = await getProductBySlug(slug);
+      if (p) {
+        setProduct(p);
+        const rel = await getProductsByCategory(p.category);
+        setRelated(rel.filter((r) => r.id !== p.id).slice(0, 4));
+      }
+      setChecked(true);
+    })();
   }, [slug]);
 
   if (!checked) {

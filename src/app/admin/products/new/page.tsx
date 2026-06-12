@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Link from "next/link";
 import { Save, FileText, X, Plus, UploadCloud, Barcode } from "lucide-react";
 import Bottle3D from "@/components/ui/Bottle3D";
 import StatusBadge from "@/components/admin/StatusBadge";
-import { getCategories } from "@/lib/productStore";
+import { getCategories, type Category } from "@/lib/productStore";
 import { addProduct, nextProductId, slugify } from "@/lib/productStore";
 import type { Product, Capacity, CategorySlug } from "@/data/products";
 
@@ -31,7 +31,9 @@ const COLOR_PRESETS = [
 
 export default function AddProductPage() {
 
-  const categories = getCategories();
+  const [categories, setCats] = useState<Category[]>([]);
+
+  useEffect(() => { getCategories().then(setCats); }, []);
 
   const [name, setName] = useState("");
   const [sku, setSku] = useState(nextProductId());

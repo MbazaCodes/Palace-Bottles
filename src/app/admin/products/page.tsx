@@ -20,11 +20,8 @@ export default function AdminProductsPage() {
   const [CATEGORIES, setCategories] = useState(SEED_CATS);
 
   useEffect(() => {
-    const load = () => { setProducts(getProducts()); setCategories(getCategories()); };
+    const load = async () => { setProducts(await getProducts()); setCategories(await getCategories()); };
     load();
-    window.addEventListener("focus", load);
-    document.addEventListener("visibilitychange", load);
-    return () => { window.removeEventListener("focus", load); document.removeEventListener("visibilitychange", load); };
   }, []);
 
   const STATS = [
@@ -36,9 +33,9 @@ export default function AdminProductsPage() {
     { label: "Products on Sale", value: String(PRODUCTS.filter((p) => p.oldPrice).length), delta: "—", up: true },
   ];
 
-  const handleDelete = (id: string) => {
-    deleteProduct(id);
-    setProducts(getProducts());
+  const handleDelete = async (id: string) => {
+    await deleteProduct(id);
+    setProducts(await getProducts());
   };
 
   const handleExport = () => {
@@ -71,7 +68,7 @@ export default function AdminProductsPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const text = reader.result as string;
       const lines = text.split("\n").slice(1).filter((l) => l.trim());
       const shapeMap: Record<string, Product["visual"]["shape"]> = {
@@ -112,7 +109,7 @@ export default function AdminProductsPage() {
         addProduct(product);
         added++;
       }
-      setProducts(getProducts());
+      setProducts(await getProducts());
       alert(`Imported ${added} product${added !== 1 ? "s" : ""} successfully.`);
     };
     reader.readAsText(file);

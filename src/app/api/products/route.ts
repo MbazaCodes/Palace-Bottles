@@ -58,8 +58,15 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   if (!supabaseAdmin) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
 
-  const { id } = await req.json();
-  const { error } = await supabaseAdmin.from("products").update({ is_active: false }).eq("id", id);
+  const body = await req.json();
+  const id = body.sku ?? body.id;
+  // Try by SKU first, then by UUID
+  let error;
+  if (id?.startsWith("PB-")) {
+    ({ error } = await supabaseAdmin.from("products").update({ is_active: false }).eq("sku", id));
+  } else {
+    ({ error } = await supabaseAdmin.from("products").update({ is_active: false }).eq("id", id));
+  }
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ deleted: true });
 }

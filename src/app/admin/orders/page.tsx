@@ -16,8 +16,8 @@ export default function AdminOrdersPage() {
   const [liveOrders, setLiveOrders] = useState<AdminOrder[]>([]);
 
   useEffect(() => {
-    setLiveOrders(
-      getAllOrders().map((o, i) => ({
+    getAllOrders().then((orders) => setLiveOrders(
+      orders.map((o, i) => ({
         id: o.id,
         seq: `#L${String(i + 1).padStart(3, "0")}`,
         customer: o.customer.fullName,
@@ -36,12 +36,12 @@ export default function AdminOrdersPage() {
           body: it.visual.body, accent: it.visual.accent, shape: it.visual.shape,
         })),
       }))
-    );
+    ));
   }, []);
 
   const rows = useMemo(
     () =>
-      [...liveOrders, ...ADMIN_ORDERS].filter(
+      liveOrders.filter(
         (o) =>
           (status === "All Status" || o.status === status) &&
           (method === "All Methods" || o.payment === method) &&

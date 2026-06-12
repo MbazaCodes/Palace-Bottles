@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Copy, Smartphone, Banknote } from "lucide-react";
 import { BRAND, formatTZS } from "@/lib/constants";
-import { getOrder, type Order } from "@/lib/orders";
+import { trackOrder, type Order } from "@/lib/orders";
 
 function Inner() {
   const id = useSearchParams().get("id") ?? "—";
   const [order, setOrder] = useState<Order | undefined>(undefined);
-  useEffect(() => { setOrder(getOrder(id)); }, [id]);
+  useEffect(() => { trackOrder(id).then((o) => { if (o) setOrder(o); }); }, [id]);
 
   const isCod = order?.payment === "Cash on Delivery";
 

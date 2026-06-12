@@ -8,7 +8,7 @@ import { getBestSellers } from "@/lib/productStore";
 
 export default function BestSellersPage() {
   const [products, setProducts] = useState(seedBest());
-  useEffect(() => { setProducts(getBestSellers()); }, []);
+  useEffect(() => { getBestSellers().then(setProducts); }, []);
   return (
     <>
       <PageHero
