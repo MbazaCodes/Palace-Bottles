@@ -1,8 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
-import { PRODUCTS, CATEGORIES, type CategorySlug } from "@/data/products";
+import { PRODUCTS as SEED, CATEGORIES as SEED_CATS, type CategorySlug } from "@/data/products";
+import { getProducts, getCategories } from "@/lib/productStore";
 import ProductCard from "@/components/product/ProductCard";
 
 const CAPACITIES = ["500ml", "750ml", "1L", "2L"] as const;
@@ -11,6 +12,13 @@ export default function ShopClient() {
   const params = useSearchParams();
   const initialCat = (params.get("category") as CategorySlug | null) ?? "all";
   const [cat, setCat] = useState<string>(initialCat);
+  const [PRODUCTS, setProducts] = useState(SEED);
+  const [CATEGORIES, setCategories] = useState(SEED_CATS);
+
+  useEffect(() => {
+    setProducts(getProducts());
+    setCategories(getCategories());
+  }, []);
   const [caps, setCaps] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState(120000);
   const [sort, setSort] = useState(params.get("sort") === "new" ? "new" : "recommended");

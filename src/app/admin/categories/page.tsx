@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 import Bottle3D from "@/components/ui/Bottle3D";
+import { getCategories, saveCategories, type Category } from "@/lib/productStore";
 
 const INITIAL = [
   { slug: "thermal-flasks", name: "Thermal Flasks", nameSw: "Chupa za Chai", products: 98, active: true, body: "#16181d", accent: "#3a3f4a", shape: "flask" as const },
@@ -14,6 +15,21 @@ const INITIAL = [
 
 export default function AdminCategoriesPage() {
   const [cats, setCats] = useState(INITIAL);
+
+  useEffect(() => {
+    const stored = getCategories();
+    if (stored.length > 0) {
+      setCats(stored.map((c) => {
+        const seed = INITIAL.find((s) => s.slug === c.slug);
+        return seed ?? { slug: c.slug as string, name: c.name, nameSw: "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" as const };
+      }));
+    }
+  }, []);
+
+  const persist = (newCats: typeof INITIAL) => {
+    setCats(newCats);
+    saveCategories(newCats.map((c) => ({ slug: c.slug as never, name: c.name, count: `${c.products}+ Products`, tint: "from-slate-200 to-slate-400" })));
+  };
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [nameSw, setNameSw] = useState("");
@@ -22,7 +38,7 @@ export default function AdminCategoriesPage() {
   const addCat = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    setCats([...cats, { slug: name.toLowerCase().replace(/\s+/g, "-"), name, nameSw: nameSw || "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" }]);
+    persist([...cats, { slug: name.toLowerCase().replace(/\s+/g, "-"), name, nameSw: nameSw || "", products: 0, active: true, body: "#102a6b", accent: "#2563eb", shape: "bottle" }]);
     setName(""); setNameSw(""); setShowForm(false);
   };
 
@@ -74,8 +90,8 @@ export default function AdminCategoriesPage() {
                 <td><StatusBadge status={c.active ? "Active" : "Inactive"} /></td>
                 <td className="px-4">
                   <span className="flex gap-1">
-                    <button onClick={() => setCats(cats.map((x) => x.slug === c.slug ? { ...x, active: !x.active } : x))} aria-label={`Toggle ${c.name}`} className="rounded-lg border border-silver p-1.5 hover:bg-frost"><Pencil className="size-3.5 text-navy/60" /></button>
-                    <button onClick={() => setCats(cats.filter((x) => x.slug !== c.slug))} aria-label={`Delete ${c.name}`} className="rounded-lg border border-red-200 p-1.5 text-red-500 hover:bg-red-50"><Trash2 className="size-3.5" /></button>
+                    <button onClick={() => persist(cats.map((x) => x.slug === c.slug ? { ...x, active: !x.active } : x))} aria-label={`Toggle ${c.name}`} className="rounded-lg border border-silver p-1.5 hover:bg-frost"><Pencil className="size-3.5 text-navy/60" /></button>
+                    <button onClick={() => persist(cats.filter((x) => x.slug !== c.slug))} aria-label={`Delete ${c.name}`} className="rounded-lg border border-red-200 p-1.5 text-red-500 hover:bg-red-50"><Trash2 className="size-3.5" /></button>
                   </span>
                 </td>
               </tr>

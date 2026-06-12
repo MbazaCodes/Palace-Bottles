@@ -1,15 +1,18 @@
+"use client";
 import Link from "next/link";
 import { Zap, ArrowRight } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import Countdown from "@/components/ui/Countdown";
 import ProductCard from "@/components/product/ProductCard";
-import { flashSaleProducts } from "@/data/products";
-
-export const metadata = { title: "Special Offers — Palace Bottles" };
+import { useEffect, useState } from "react";
+import { flashSaleProducts as seedFlash } from "@/data/products";
+import { getFlashSaleProducts } from "@/lib/productStore";
 
 const target = new Date(Date.now() + 2 * 86400000 + 14 * 3600000);
 
 export default function OffersPage() {
+  const [flashProducts, setFlashProducts] = useState(seedFlash());
+  useEffect(() => { setFlashProducts(getFlashSaleProducts()); }, []);
   return (
     <>
       <PageHero
@@ -40,7 +43,7 @@ export default function OffersPage() {
             <Zap className="size-6 fill-amber-400 text-amber-400" /> Flash Sales
           </h2>
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {flashSaleProducts().map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+            {flashProducts.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
           </div>
         </section>
 

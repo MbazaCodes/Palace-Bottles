@@ -1,11 +1,16 @@
 "use client";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { CATEGORIES, PRODUCTS } from "@/data/products";
+import { CATEGORIES as SEED_CATS, PRODUCTS as SEED } from "@/data/products";
+import { getProducts, getCategories } from "@/lib/productStore";
 import Bottle3D from "@/components/ui/Bottle3D";
 
 export default function Categories() {
+  const [CATEGORIES, setCategories] = useState(SEED_CATS);
+  const [PRODUCTS, setProducts] = useState(SEED);
+  useEffect(() => { setCategories(getCategories()); setProducts(getProducts()); }, []);
   return (
     <section id="categories" className="mx-auto max-w-7xl px-4 py-16">
       <h2 className="text-center font-display text-3xl font-extrabold text-navy">

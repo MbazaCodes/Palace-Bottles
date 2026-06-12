@@ -1,11 +1,12 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Download, Upload, Plus, Search, Pencil, MoreVertical } from "lucide-react";
+import { Download, Upload, Plus, Search, Pencil, Trash2 } from "lucide-react";
 import StatusBadge from "@/components/admin/StatusBadge";
 import { CategoryDonut } from "@/components/admin/Charts";
 import Bottle3D from "@/components/ui/Bottle3D";
-import { PRODUCTS, CATEGORIES } from "@/data/products";
+import { PRODUCTS as SEED, CATEGORIES as SEED_CATS } from "@/data/products";
+import { getProducts, getCategories, deleteProduct } from "@/lib/productStore";
 import { TOP_PRODUCTS, INVENTORY_ROWS } from "@/data/admin";
 import { formatTZS } from "@/lib/constants";
 
@@ -21,6 +22,18 @@ const STATS = [
 export default function AdminProductsPage() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All Categories");
+  const [PRODUCTS, setProducts] = useState(SEED);
+  const [CATEGORIES, setCategories] = useState(SEED_CATS);
+
+  useEffect(() => {
+    setProducts(getProducts());
+    setCategories(getCategories());
+  }, []);
+
+  const handleDelete = (id: string) => {
+    deleteProduct(id);
+    setProducts(getProducts());
+  };
 
   const rows = useMemo(
     () =>
@@ -101,7 +114,7 @@ export default function AdminProductsPage() {
                     <td className="px-4">
                       <span className="flex gap-1">
                         <Link href="/admin/products/new" aria-label={`Edit ${p.name}`} className="rounded-lg border border-silver p-1.5 hover:bg-frost"><Pencil className="size-3.5 text-navy/60" /></Link>
-                        <button aria-label="More actions" className="rounded-lg border border-silver p-1.5 hover:bg-frost"><MoreVertical className="size-3.5 text-navy/60" /></button>
+                        <button onClick={() => handleDelete(p.id)} aria-label={`Delete ${p.name}`} className="rounded-lg border border-red-200 p-1.5 text-red-500 hover:bg-red-50"><Trash2 className="size-3.5" /></button>
                       </span>
                     </td>
                   </tr>

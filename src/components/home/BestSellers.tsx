@@ -1,8 +1,13 @@
+"use client";
 import Link from "next/link";
-import { bestSellers } from "@/data/products";
+import { useEffect, useState } from "react";
+import { bestSellers as seedBestSellers } from "@/data/products";
+import { getBestSellers } from "@/lib/productStore";
 import ProductCard from "@/components/product/ProductCard";
 
 export default function BestSellers() {
+  const [products, setProducts] = useState(seedBestSellers());
+  useEffect(() => { setProducts(getBestSellers()); }, []);
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">
       <div className="flex items-center justify-between">
@@ -12,7 +17,7 @@ export default function BestSellers() {
         </Link>
       </div>
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {bestSellers().map((p, i) => (
+        {products.map((p, i) => (
           <ProductCard key={p.id} product={p} index={i} />
         ))}
       </div>

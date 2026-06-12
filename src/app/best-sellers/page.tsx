@@ -1,11 +1,14 @@
+"use client";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/product/ProductCard";
 import TrustBar from "@/components/home/TrustBar";
-import { bestSellers } from "@/data/products";
-
-export const metadata = { title: "Best Sellers — Palace Bottles" };
+import { useEffect, useState } from "react";
+import { bestSellers as seedBest } from "@/data/products";
+import { getBestSellers } from "@/lib/productStore";
 
 export default function BestSellersPage() {
+  const [products, setProducts] = useState(seedBest());
+  useEffect(() => { setProducts(getBestSellers()); }, []);
   return (
     <>
       <PageHero
@@ -15,7 +18,7 @@ export default function BestSellersPage() {
       />
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-          {bestSellers().map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+          {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
       </div>
       <TrustBar dark={false} />
