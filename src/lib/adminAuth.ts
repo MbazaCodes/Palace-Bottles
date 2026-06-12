@@ -38,6 +38,16 @@ export interface AdminSession {
 
 const STAFF_KEY = "pb_staff";
 const SESSION_KEY = "pb_admin_session";
+const AUTH_VERSION_KEY = "pb_auth_version";
+const AUTH_VERSION = "2";
+
+if (typeof window !== "undefined") {
+  if (localStorage.getItem(AUTH_VERSION_KEY) !== AUTH_VERSION) {
+    localStorage.removeItem(STAFF_KEY);
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.setItem(AUTH_VERSION_KEY, AUTH_VERSION);
+  }
+}
 
 /** Which admin routes each role can open. "all" = everything. */
 export const ROLE_ACCESS: Record<StaffRole, string[] | "all"> = {
