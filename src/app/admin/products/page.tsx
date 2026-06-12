@@ -6,7 +6,8 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import { CategoryDonut } from "@/components/admin/Charts";
 import Bottle3D from "@/components/ui/Bottle3D";
 import { PRODUCTS as SEED, CATEGORIES as SEED_CATS } from "@/data/products";
-import { getProducts, getCategories, deleteProduct } from "@/lib/productStore";
+import { getProducts, getCategories, deleteProduct, saveProducts, addProduct, slugify, nextProductId } from "@/lib/productStore";
+import type { Product, Capacity, CategorySlug } from "@/data/products";
 import { TOP_PRODUCTS, INVENTORY_ROWS } from "@/data/admin";
 import { formatTZS } from "@/lib/constants";
 
@@ -35,6 +36,84 @@ export default function AdminProductsPage() {
     setProducts(getProducts());
   };
 
+  const handleExport = () => {
+    const csv = [
+      ["SKU", "Name", "Category", "Price", "Sale Price", "Stock", "Capacities", "Colors", "Description"].join(","),
+      ...PRODUCTS.map((p) =>
+        [
+          p.id,
+          `"${p.name}"`,
+          p.category,
+          p.oldPrice ?? p.price,
+          p.oldPrice ? p.price : "",
+          p.stock,
+          `"${p.capacities.join("; ")}"`,
+          `"${p.colors.map((c) => c.name).join("; ")}"`,
+          `"${(p.shortDescription ?? "").replace(/"/g, '""')}"`,
+        ].join(",")
+      ),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `palace-bottles-products-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const lines = text.split("\n").slice(1).filter((l) => l.trim());
+      const shapeMap: Record<string, Product["visual"]["shape"]> = {
+        "thermal-flasks": "flask", "water-bottles": "bottle", "sports-bottles": "sport",
+        "kids-bottles": "kids", "coffee-tumblers": "tumbler",
+      };
+      let added = 0;
+      for (const line of lines) {
+        // Parse CSV (handles quoted fields)
+        const cols = line.match(/(".*?"|[^,]*),?/g)?.map((c) => c.replace(/,?$/, "").replace(/^"|"$/g, "").replace(/""/g, '"')) ?? [];
+        if (cols.length < 4) continue;
+        const [sku, name, category, priceStr, salePriceStr, stockStr, capsStr, colorsStr, desc] = cols;
+        const price = Number(priceStr) || 0;
+        const salePrice = Number(salePriceStr) || 0;
+        const stock = Number(stockStr) || 0;
+        const caps = (capsStr ?? "500ml").split(";").map((c) => c.trim()).filter(Boolean) as Capacity[];
+        const colorNames = (colorsStr ?? "Black").split(";").map((c) => c.trim()).filter(Boolean);
+        const colorPresets: Record<string, string> = { Black: "#16181d", Navy: "#102a6b", Blue: "#2563eb", White: "#eef0f4", Silver: "#cdd3dd", Green: "#16513a", Red: "#dc2626", Purple: "#a78bfa", Pink: "#f472b6" };
+        const colors = colorNames.map((n) => ({ name: n, hex: colorPresets[n] ?? "#666666" }));
+        const cat = (category || "water-bottles") as CategorySlug;
+
+        const product: Product = {
+          id: sku || nextProductId(),
+          slug: slugify(name),
+          name,
+          category: cat,
+          capacity: caps[0] ?? "500ml",
+          capacities: caps,
+          colors,
+          price: salePrice || price,
+          oldPrice: salePrice ? price : undefined,
+          rating: 0, reviews: 0,
+          stock,
+          description: desc ?? "",
+          shortDescription: desc ?? "",
+          visual: { body: colors[0]?.hex ?? "#16181d", accent: colors[1]?.hex ?? "#3a3f4a", shape: shapeMap[cat] ?? "bottle" },
+        };
+        addProduct(product);
+        added++;
+      }
+      setProducts(getProducts());
+      alert(`Imported ${added} product${added !== 1 ? "s" : ""} successfully.`);
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
   const rows = useMemo(
     () =>
       PRODUCTS.filter(
@@ -55,8 +134,8 @@ export default function AdminProductsPage() {
           <p className="text-xs text-navy/50">Dashboard › Products</p>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 rounded-xl border border-silver bg-white px-4 py-2.5 text-sm font-semibold text-navy shadow-card"><Download className="size-4" /> Export</button>
-          <button className="flex items-center gap-2 rounded-xl border border-silver bg-white px-4 py-2.5 text-sm font-semibold text-navy shadow-card"><Upload className="size-4" /> Import</button>
+          <button onClick={handleExport} className="flex items-center gap-2 rounded-xl border border-silver bg-white px-4 py-2.5 text-sm font-semibold text-navy shadow-card"><Download className="size-4" /> Export</button>
+          <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-silver bg-white px-4 py-2.5 text-sm font-semibold text-navy shadow-card hover:bg-frost"><Upload className="size-4" /> Import<input type="file" accept=".csv" onChange={handleImport} className="hidden" /></label>
           <Link href="/admin/products/new" className="flex items-center gap-2 rounded-xl bg-royal px-4 py-2.5 text-sm font-bold text-white hover:bg-royal-bright"><Plus className="size-4" /> Add Product</Link>
         </div>
       </div>

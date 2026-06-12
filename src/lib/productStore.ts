@@ -29,7 +29,7 @@ function getLocalProducts(): Product[] {
   try { return JSON.parse(raw) as Product[]; } catch { return []; }
 }
 
-function saveLocalProducts(list: Product[]) {
+export function saveProducts(list: Product[]) {
   if (typeof window !== "undefined") localStorage.setItem(PRODUCTS_KEY, JSON.stringify(list));
 }
 
@@ -70,7 +70,7 @@ export async function fetchProducts(): Promise<Product[]> {
             shape: categoryToShape((p.category?.slug ?? "water-bottles") as CategorySlug),
           },
         }));
-        saveLocalProducts(mapped);
+        saveProducts(mapped);
         return mapped;
       }
     }
@@ -91,7 +91,7 @@ function categoryToShape(cat: CategorySlug): Product["visual"]["shape"] {
 export async function addProduct(p: Product): Promise<boolean> {
   // Always save locally
   const all = getLocalProducts();
-  saveLocalProducts([p, ...all]);
+  saveProducts([p, ...all]);
 
   // Also try Supabase API
   try {
@@ -118,13 +118,13 @@ export async function addProduct(p: Product): Promise<boolean> {
 }
 
 export async function deleteProduct(id: string): Promise<void> {
-  saveLocalProducts(getLocalProducts().filter((p) => p.id !== id));
+  saveProducts(getLocalProducts().filter((p) => p.id !== id));
   try { await fetch("/api/products", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) }); } catch { /* ok */ }
 }
 
 export function updateProduct(id: string, updates: Partial<Product>) {
   const all = getLocalProducts();
-  saveLocalProducts(all.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+  saveProducts(all.map((p) => (p.id === id ? { ...p, ...updates } : p)));
 }
 
 // ── Queries ────────────────────────────────────────────────────
