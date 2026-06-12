@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 import { Save, FileText, X, Plus, UploadCloud, Barcode } from "lucide-react";
 import Bottle3D from "@/components/ui/Bottle3D";
@@ -30,7 +30,7 @@ const COLOR_PRESETS = [
 ];
 
 export default function AddProductPage() {
-  const router = useRouter();
+
   const categories = getCategories();
 
   const [name, setName] = useState("");
@@ -84,7 +84,7 @@ export default function AddProductPage() {
 
     await addProduct(product);
     setSaved(true);
-    setTimeout(() => router.push("/admin/products"), 1200);
+    setTimeout(() => { window.location.href = "/admin/products"; }, 1200);
   };
 
   const addColor = () => {

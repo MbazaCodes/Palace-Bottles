@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Search, Bell, MessageSquare, ChevronDown } from "lucide-react";
-import { currentAdmin, type AdminSession } from "@/lib/adminAuth";
+import { Search, Bell, ChevronDown, LogOut } from "lucide-react";
+import { currentAdmin, logoutAdmin, type AdminSession } from "@/lib/adminAuth";
 
 export default function AdminTopbar() {
-  const [session, setSession] = useState<AdminSession | null>(null);
-  useEffect(() => { setSession(currentAdmin()); }, []);
-  const initials = (n: string) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const [admin, setAdmin] = useState<AdminSession | null>(null);
+  useEffect(() => { setAdmin(currentAdmin()); }, []);
+
+  const initials = admin?.name
+    ? admin.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
+    : "—";
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-silver bg-white/90 px-4 py-3 backdrop-blur-md lg:px-8">
@@ -14,25 +17,22 @@ export default function AdminTopbar() {
         <Search className="size-4 text-navy/45" />
         <input placeholder="Search orders, customers, products..." aria-label="Search admin"
           className="w-full bg-transparent text-sm outline-none placeholder:text-navy/40" />
-        <kbd className="hidden rounded-md border border-silver bg-white px-1.5 py-0.5 text-[10px] text-navy/50 sm:block">⌘K</kbd>
       </label>
       <div className="flex items-center gap-2">
-        <button aria-label="Notifications, 5 unread" className="relative rounded-full p-2 hover:bg-frost">
+        <button aria-label="Notifications" className="relative rounded-full p-2 hover:bg-frost">
           <Bell className="size-5 text-navy/70" />
-          <span className="absolute -right-0.5 -top-0.5 flex size-4.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">5</span>
         </button>
-        <button aria-label="Messages, 3 unread" className="relative hidden rounded-full p-2 hover:bg-frost sm:block">
-          <MessageSquare className="size-5 text-navy/70" />
-          <span className="absolute -right-0.5 -top-0.5 flex size-4.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">3</span>
-        </button>
-        <button className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-frost">
-          <span className="flex size-9 items-center justify-center rounded-full bg-ice font-display text-xs font-bold text-navy">{session ? initials(session.name) : "PA"}</span>
-          <span className="hidden text-left md:block">
-            <span className="block text-sm font-bold text-navy">{session?.name ?? "Palace Admin"}</span>
-            <span className="block text-xs text-navy/55">{session?.role ?? "Super Admin"}</span>
+        <div className="flex items-center gap-2 rounded-xl px-2 py-1.5">
+          <span className="flex size-9 items-center justify-center rounded-full bg-ice font-display text-xs font-bold text-navy">
+            {initials}
           </span>
-          <ChevronDown className="hidden size-4 text-navy/50 md:block" />
-        </button>
+          {admin && (
+            <span className="hidden text-left md:block">
+              <span className="block text-sm font-bold text-navy">{admin.name}</span>
+              <span className="block text-xs text-navy/55">{admin.role}</span>
+            </span>
+          )}
+        </div>
       </div>
     </header>
   );

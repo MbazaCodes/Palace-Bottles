@@ -27,8 +27,11 @@ export default function AdminProductsPage() {
   const [CATEGORIES, setCategories] = useState(SEED_CATS);
 
   useEffect(() => {
-    setProducts(getProducts());
-    setCategories(getCategories());
+    const load = () => { setProducts(getProducts()); setCategories(getCategories()); };
+    load();
+    window.addEventListener("focus", load);
+    document.addEventListener("visibilitychange", load);
+    return () => { window.removeEventListener("focus", load); document.removeEventListener("visibilitychange", load); };
   }, []);
 
   const handleDelete = (id: string) => {

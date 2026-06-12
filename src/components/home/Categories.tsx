@@ -10,7 +10,12 @@ import Bottle3D from "@/components/ui/Bottle3D";
 export default function Categories() {
   const [CATEGORIES, setCategories] = useState(SEED_CATS);
   const [PRODUCTS, setProducts] = useState(SEED);
-  useEffect(() => { setCategories(getCategories()); setProducts(getProducts()); }, []);
+  useEffect(() => {
+    const load = () => { setCategories(getCategories()); setProducts(getProducts()); };
+    load();
+    window.addEventListener("focus", load);
+    return () => window.removeEventListener("focus", load);
+  }, []);
   return (
     <section id="categories" className="mx-auto max-w-7xl px-4 py-16">
       <h2 className="text-center font-display text-3xl font-extrabold text-navy">

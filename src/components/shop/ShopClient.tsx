@@ -16,8 +16,10 @@ export default function ShopClient() {
   const [CATEGORIES, setCategories] = useState(SEED_CATS);
 
   useEffect(() => {
-    setProducts(getProducts());
-    setCategories(getCategories());
+    const load = () => { setProducts(getProducts()); setCategories(getCategories()); };
+    load();
+    window.addEventListener("focus", load);
+    return () => window.removeEventListener("focus", load);
   }, []);
   const [caps, setCaps] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState(120000);
