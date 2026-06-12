@@ -9,7 +9,7 @@ export default function TopBar() {
           <MapPin className="size-3.5 text-ice" /> {BRAND.address.replace(", Tanzania", "")}
         </span>
         <span className="flex items-center gap-1.5">
-          <Truck className="size-3.5 text-ice" /> Free delivery across Tanzania Mainland &amp; Zanzibar
+          <Truck className="size-3.5 text-ice" /> We deliver across Tanzania Mainland &amp; Zanzibar
         </span>
         <a href={`tel:${BRAND.phoneRaw}`} className="hidden items-center gap-1.5 hover:text-ice md:flex">
           <Phone className="size-3.5 text-ice" /> {BRAND.phone}

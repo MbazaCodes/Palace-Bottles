@@ -18,6 +18,7 @@ const schema = z.object({
   district: z.string().min(2, "Enter your district"),
   address: z.string().min(4, "Enter your delivery address"),
   payment: z.enum(PAYMENT_METHODS),
+  shipping: z.enum(["standard", "fast"] as const),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -27,10 +28,17 @@ export default function CheckoutPage() {
   const { items, clear } = useCart();
   const subtotal = cartSubtotal(items);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { payment: "M-Pesa" },
+    defaultValues: { payment: "M-Pesa", shipping: "standard" },
   });
+
+  const region = watch("region");
+  const shipping = watch("shipping");
+  const isDar = region === "Dar es Salaam";
+  const isZanzibar = region?.startsWith("Zanzibar") || region?.startsWith("Pemba");
+  const deliveryFee = shipping === "fast" ? 5000 : (isDar ? 0 : 5000);
+  const total = subtotal + deliveryFee;
 
   const onSubmit = async (data: FormData) => {
     const order = await createOrder(data, items, subtotal);
@@ -109,6 +117,32 @@ export default function CheckoutPage() {
               ))}
             </div>
           </section>
+
+          <section className="rounded-2xl border border-silver bg-white p-6 shadow-card">
+            <h2 className="font-display text-lg font-bold text-navy">Delivery Option</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-silver px-4 py-3.5 text-sm font-semibold text-navy has-checked:border-royal has-checked:bg-ice/60">
+                <input type="radio" value="standard" {...register("shipping")} className="accent-royal" />
+                <div>
+                  <p>Standard Delivery</p>
+                  <p className="text-xs font-normal text-navy/55">
+                    {isDar ? "Free — 1-2 days in Dar es Salaam" : isZanzibar ? "TZS 5,000 — 3-5 days to Zanzibar" : region ? "TZS 5,000 — 2-5 days" : "Select region first"}
+                  </p>
+                </div>
+                <span className="ml-auto font-display text-sm font-bold text-emerald-600">{isDar ? "Free" : "TZS 5,000"}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-silver px-4 py-3.5 text-sm font-semibold text-navy has-checked:border-royal has-checked:bg-ice/60">
+                <input type="radio" value="fast" {...register("shipping")} className="accent-royal" />
+                <div>
+                  <p>Fast Delivery</p>
+                  <p className="text-xs font-normal text-navy/55">
+                    {isDar ? "Same day / Next day in Dar" : "Priority processing — 1-3 days"}
+                  </p>
+                </div>
+                <span className="ml-auto font-display text-sm font-bold text-navy">TZS 5,000</span>
+              </label>
+            </div>
+          </section>
         </div>
 
         {/* Summary */}
@@ -128,8 +162,8 @@ export default function CheckoutPage() {
           </ul>
           <div className="mt-5 space-y-2 border-t border-silver pt-4 text-sm">
             <div className="flex justify-between"><span className="text-navy/60">Subtotal</span><span className="font-semibold">{formatTZS(subtotal)}</span></div>
-            <div className="flex justify-between"><span className="text-navy/60">Delivery</span><span className="text-navy/60">To be confirmed</span></div>
-            <div className="flex justify-between pt-1"><span className="font-bold text-navy">Total</span><span className="font-display text-xl font-bold text-navy">{formatTZS(subtotal)}</span></div>
+            <div className="flex justify-between"><span className="text-navy/60">Delivery</span><span className={deliveryFee === 0 ? "font-semibold text-emerald-600" : "font-semibold text-navy"}>{deliveryFee === 0 ? "Free" : formatTZS(deliveryFee)}</span></div>
+            <div className="flex justify-between pt-1"><span className="font-bold text-navy">Total</span><span className="font-display text-xl font-bold text-navy">{formatTZS(total)}</span></div>
           </div>
           <button type="submit" disabled={isSubmitting}
             className="mt-5 w-full rounded-xl bg-royal py-3.5 text-sm font-bold text-white hover:bg-royal-bright disabled:opacity-50">
@@ -137,7 +171,7 @@ export default function CheckoutPage() {
           </button>
           <p className="mt-3 flex items-start gap-1.5 text-xs text-navy/55">
             <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-royal" />
-            Palace Bottles team will contact you to confirm delivery costs.
+            Your order includes delivery. Palace Bottles team will contact you to arrange delivery timing.
           </p>
         </aside>
       </form>

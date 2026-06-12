@@ -1,77 +1,53 @@
-import { MonthlyRevenueBar, CustomerGrowthLine, CategoryDonut, RevenueChart } from "@/components/admin/Charts";
-import Bottle3D from "@/components/ui/Bottle3D";
-import { TOP_PRODUCTS } from "@/data/admin";
-
-export const metadata = { title: "Reports & Analytics — Palace Bottles Admin" };
-
-const CATEGORY_PERF: { name: string; revenue: string; orders: number; growth: string }[] = [];
+"use client";
+import { useEffect, useState } from "react";
+import { getProducts } from "@/lib/productStore";
+import { getAllOrders, type Order } from "@/lib/orders";
+import { formatTZS } from "@/lib/constants";
+import type { Product } from "@/data/products";
 
 export default function AdminReportsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => { getProducts().then(setProducts); getAllOrders().then(setOrders); }, []);
+
+  const totalRevenue = orders.reduce((t, o) => t + o.subtotal, 0);
+  const avgOrder = orders.length > 0 ? Math.round(totalRevenue / orders.length) : 0;
+  const uniqueCustomers = new Set(orders.map((o) => o.customer.phone)).size;
+
   return (
     <>
-      <div>
-        <h1 className="font-display text-2xl font-extrabold text-navy">Reports &amp; Analytics</h1>
-        <p className="text-xs text-navy/50">Dashboard › Reports</p>
-      </div>
+      <h1 className="font-display text-2xl font-extrabold text-navy">Reports &amp; Analytics</h1>
+      <p className="text-xs text-navy/50">Dashboard › Reports</p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[["Revenue (This Month)", "TZS 0"], ["Revenue (This Year)", "TZS 0"], ["Avg Order Value", "TZS 0"], ["Repeat Purchase Rate", "0%"]].map(([l, v]) => (
-          <div key={l} className="rounded-2xl border border-silver bg-white p-4 shadow-card">
-            <p className="text-xs text-navy/55">{l}</p>
-            <p className="font-display text-lg font-extrabold text-navy">{v}</p>
-          </div>
+        {[["Total Revenue", formatTZS(totalRevenue)], ["Total Orders", orders.length], ["Avg Order Value", formatTZS(avgOrder)], ["Unique Customers", uniqueCustomers], ["Total Products", products.length], ["Products on Sale", products.filter((p) => p.oldPrice).length], ["Delivered Orders", orders.filter((o) => o.status === "Delivered").length], ["Pending Orders", orders.filter((o) => o.status === "Pending").length]].map(([l, v]) => (
+          <div key={String(l)} className="rounded-2xl border border-silver bg-white p-4 shadow-card"><p className="text-xs text-navy/55">{l}</p><p className="font-display text-xl font-extrabold text-navy">{typeof v === "number" ? v.toLocaleString() : v}</p></div>
         ))}
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
-          <h2 className="font-display text-base font-bold text-navy">Daily Revenue <span className="text-xs font-normal text-navy/50">(this week)</span></h2>
-          <div className="mt-3"><RevenueChart /></div>
+          <h2 className="font-display text-base font-bold text-navy">Recent Orders</h2>
+          {orders.length === 0 ? <p className="mt-4 text-sm text-navy/55">No orders yet.</p> : (
+            <table className="mt-3 w-full text-sm"><thead><tr className="text-left text-xs text-navy/50"><th className="py-2 font-medium">Order</th><th className="font-medium">Customer</th><th className="font-medium">Amount</th><th className="font-medium">Status</th></tr></thead>
+              <tbody>{orders.slice(0, 10).map((o) => (
+                <tr key={o.id} className="border-t border-silver/60"><td className="py-2 font-bold text-navy">{o.id}</td><td className="text-navy/70">{o.customer.fullName}</td><td className="font-semibold">{formatTZS(o.subtotal)}</td><td className="text-xs"><span className="rounded bg-ice px-1.5 py-0.5 font-bold text-navy">{o.status}</span></td></tr>
+              ))}</tbody>
+            </table>
+          )}
         </div>
         <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
-          <h2 className="font-display text-base font-bold text-navy">Monthly Revenue <span className="text-xs font-normal text-navy/50">(last 6 months)</span></h2>
-          <div className="mt-3"><MonthlyRevenueBar /></div>
-        </div>
-        <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
-          <h2 className="font-display text-base font-bold text-navy">Customer Growth</h2>
-          <div className="mt-3"><CustomerGrowthLine /></div>
-        </div>
-        <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
-          <h2 className="font-display text-base font-bold text-navy">Sales by Category</h2>
-          <CategoryDonut />
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-2">
-        <div className="rounded-2xl border border-silver bg-white p-5 shadow-card">
-          <h2 className="font-display text-base font-bold text-navy">Best Sellers</h2>
-          <ul className="mt-3 space-y-3">
-            {TOP_PRODUCTS.map((p, i) => (
-              <li key={p.name} className="flex items-center gap-2.5 text-sm">
-                <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white ${i === 0 ? "bg-amber-500" : i === 1 ? "bg-royal" : i === 2 ? "bg-violet-500" : "bg-slate-400"}`}>{i + 1}</span>
-                <span className="w-8 shrink-0 rounded-lg bg-frost p-1"><Bottle3D body={p.body} accent={p.accent} shape={p.shape} label={false} /></span>
-                <span className="min-w-0 flex-1 truncate font-semibold text-navy">{p.name}</span>
-                <span className="text-xs text-navy/55">{p.sold} sold</span>
-                <span className="text-xs font-bold text-navy">{p.revenue}</span>
+          <h2 className="font-display text-base font-bold text-navy">Top Products</h2>
+          {products.length === 0 ? <p className="mt-4 text-sm text-navy/55">No products yet.</p> : (
+            <ul className="mt-3 space-y-3">{products.slice(0, 8).map((p, i) => (
+              <li key={p.id} className="flex items-center gap-3 text-sm">
+                <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white ${i === 0 ? "bg-amber-500" : i === 1 ? "bg-royal" : "bg-slate-400"}`}>{i + 1}</span>
+                <span className="flex-1 font-semibold text-navy">{p.name}</span>
+                <span className="text-xs text-navy/55">{formatTZS(p.price)}</span>
               </li>
-            ))}
-          </ul>
-        </div>
-        <div className="overflow-x-auto rounded-2xl border border-silver bg-white shadow-card">
-          <h2 className="px-4 pt-4 font-display text-base font-bold text-navy">Category Performance</h2>
-          <table className="mt-2 w-full min-w-[24rem] text-sm">
-            <thead><tr className="border-b border-silver text-left text-xs text-navy/50"><th className="px-4 py-3 font-medium">Category</th><th className="font-medium">Revenue</th><th className="font-medium">Orders</th><th className="px-4 font-medium">Growth</th></tr></thead>
-            <tbody>
-              {CATEGORY_PERF.map((c) => (
-                <tr key={c.name} className="border-b border-silver/60 last:border-0 hover:bg-frost/60">
-                  <td className="px-4 py-3 font-semibold text-navy">{c.name}</td>
-                  <td className="font-semibold text-navy">{c.revenue}</td>
-                  <td className="text-navy/70">{c.orders}</td>
-                  <td className="px-4 font-bold text-emerald-600">{c.growth}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}</ul>
+          )}
         </div>
       </div>
     </>
