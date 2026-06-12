@@ -32,8 +32,8 @@ export default function CheckoutPage() {
     defaultValues: { payment: "M-Pesa" },
   });
 
-  const onSubmit = (data: FormData) => {
-    const order = createOrder(data, items, subtotal);
+  const onSubmit = async (data: FormData) => {
+    const order = await createOrder(data, items, subtotal);
     clear();
     router.push(`/order-confirmed?id=${order.id}`);
   };

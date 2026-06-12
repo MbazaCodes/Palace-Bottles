@@ -3,7 +3,7 @@ import { Suspense, useState } from "react";
 import { PackageSearch, Check, Clock, Phone, MapPin } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import Bottle3D from "@/components/ui/Bottle3D";
-import { getOrder, type Order } from "@/lib/orders";
+import { getOrder, trackOrder, type Order } from "@/lib/orders";
 import { formatTZS, ORDER_STATUSES, BRAND } from "@/lib/constants";
 
 function TrackOrderInner() {
@@ -11,9 +11,9 @@ function TrackOrderInner() {
   const [order, setOrder] = useState<Order | null>(null);
   const [notFound, setNotFound] = useState(false);
 
-  const track = (e: React.FormEvent) => {
+  const track = async (e: React.FormEvent) => {
     e.preventDefault();
-    const found = getOrder(query.trim());
+    const found = await trackOrder(query.trim()) ?? getOrder(query.trim());
     setOrder(found ?? null);
     setNotFound(!found);
   };

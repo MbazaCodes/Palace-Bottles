@@ -51,7 +51,7 @@ export default function AddProductPage() {
   const ALL_CAPS: Capacity[] = ["400ml", "500ml", "750ml", "900ml", "1L", "1.5L", "2L"];
   const input = "mt-1 w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal";
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim() || !price.trim()) return;
 
     const product: Product = {
@@ -82,7 +82,7 @@ export default function AddProductPage() {
       product.oldPrice = Number(price);
     }
 
-    addProduct(product);
+    await addProduct(product);
     setSaved(true);
     setTimeout(() => router.push("/admin/products"), 1200);
   };
